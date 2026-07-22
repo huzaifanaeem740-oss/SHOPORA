@@ -31,7 +31,7 @@ const ProductDisplay = (props) => {
         <div className="productdisplay-img">
           <img className='productdisplay-main-img' src={product.image} alt="" />
           <img 
-            className={`wishlist-heart-icon ${isWishlisted ? 'active' : ''}`} 
+            className={`wishlist-heart-icon PKR-{isWishlisted ? 'active' : ''}`} 
             src={heart_icom} 
             alt="Wishlist" 
             onClick={handleWishlistClick}

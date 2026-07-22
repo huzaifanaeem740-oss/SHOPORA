@@ -39,7 +39,7 @@ const whatsappUrl = `https://wa.me/923282134905?text=Order%20Details...`;
         
         all_product.forEach((item) => {
             if (cartItems[item.id] > 0) {
-                orderDetails += `- ${item.name} (Qty: ${cartItems[item.id]}) - $${item.new_price * cartItems[item.id]}%0A`
+                orderDetails += `- PKR-{item.name} (Qty: PKR-{cartItems[item.id]}) - PKR-{item.new_price * cartItems[item.id]}%0A`
             }
         })
 
@@ -47,7 +47,7 @@ const whatsappUrl = `https://wa.me/923282134905?text=Order%20Details...`;
         if (promoApplied) {
             orderDetails += `%0ADiscount (75% FARAZ): -$${discountAmount.toFixed(2)}`
         }
-        orderDetails += `%0ATotal Amount: $${finalTotal.toFixed(2)}`
+        orderDetails += `%0ATotal Amount: PKR-{finalTotal.toFixed(2)}`
         orderDetails += `%0APayment Method: ${paymentMethod}`
 
         const whatsappUrl = `https://wa.me/${923282134905}?text=${orderDetails}`
@@ -72,9 +72,9 @@ const whatsappUrl = `https://wa.me/923282134905?text=Order%20Details...`;
                             <div className="cartitems-format cartitems-format-main">
                                 <img src={e.image} alt="" className='carticon-product-icon' />
                                 <p className='cartitems-product-title'>{e.name}</p>
-                                <p>${e.new_price}</p>
+                                <p>PKR-{e.new_price}</p>
                                 <button className='cartitems-quantity'>{cartItems[e.id]}</button>
-                                <p>${e.new_price * cartItems[e.id]}</p>
+                                <p>PKR-{e.new_price * cartItems[e.id]}</p>
                                 <img className='cartitems-remove-icon' src={remove_icon} onClick={() => { removeFromCart(e.id) }} alt="" />
                             </div>
                             <hr />
