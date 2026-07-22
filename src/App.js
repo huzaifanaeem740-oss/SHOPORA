@@ -10,7 +10,6 @@ import Footer from './Components/Footer/Footer';
 import men_banner from './Components/Assets/banner_mens.png';
 import women_banner from './Components/Assets/banner_women.png';
 import kid_banner from './Components/Assets/banner_kids.png';
-import Admin from './Pages/Admin';
 import Wishlist from './Pages/Wishlist';
 
 function App() {
@@ -34,7 +33,6 @@ function App() {
             
             <Route path='/cart' element={<Cart />} />
             <Route path='/login' element={<LoginSignup />} />
-            <Route path='/admin' element={<Admin />} />
             <Route path='/wishlist' element={<Wishlist/>} />
           </Routes>
         </main>

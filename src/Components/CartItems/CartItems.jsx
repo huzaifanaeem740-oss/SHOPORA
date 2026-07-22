@@ -14,8 +14,7 @@ const CartItems = () => {
     const [showPayment, setShowPayment] = useState(false)
     const [paymentMethod, setPaymentMethod] = useState('JazzCash')
 
-    const whatsappNumber = "923001234567"
-
+const whatsappUrl = `https://wa.me/923282134905?text=Order%20Details...`;
     const subtotal = getTotalCartAmount()
 
     const handleApplyPromo = () => {
@@ -51,7 +50,7 @@ const CartItems = () => {
         orderDetails += `%0ATotal Amount: $${finalTotal.toFixed(2)}`
         orderDetails += `%0APayment Method: ${paymentMethod}`
 
-        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${orderDetails}`
+        const whatsappUrl = `https://wa.me/${923282134905}?text=${orderDetails}`
         window.open(whatsappUrl, '_blank')
     }
 
