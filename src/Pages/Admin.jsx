@@ -17,14 +17,10 @@ const Admin = () => {
         old_price: ''
     })
 
-    const [orders] = useState(() => {
-        const saved = localStorage.getItem('admin_orders')
-        return saved ? JSON.parse(saved) : [
-            { id: 101, date: '2026-07-22', items: 'Floral Print Top (x2)', total: 170, status: 'Pending', method: 'Easypaisa' },
-            { id: 102, date: '2026-07-22', items: 'Winter High Neck (x1)', total: 85, status: 'Delivered', method: 'JazzCash' }
-        ]
-    
-    })
+  const [orders, setOrders] = useState([
+    { id: 101, date: '2026-07-22', items: 'Floral Print Top (x2)', total: 170, status: 'Pending', method: 'Easypaisa' },
+    { id: 102, date: '2026-07-22', items: 'Winter High Neck (x1)', total: 85, status: 'Delivered', method: 'JazzCash' }
+]);
 
     useEffect(() => {
         localStorage.setItem('admin_products', JSON.stringify(products))
