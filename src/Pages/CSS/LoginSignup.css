@@ -1,0 +1,96 @@
+.loginsignup {
+  width: 100%;
+  height: 80vh; /* Fixed height taake scroll na aaye */
+  background: #fceae8;
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginsignup-container {
+  width: 450px; /* Width thodi kam ki hai */
+  background: white;
+  padding: 25px 40px; /* Padding kam kar di hai */
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.loginsignup-container h1 {
+  margin: 0 0 15px 0;
+  font-size: 26px; /* Font size chota kiya hai */
+  font-weight: 600;
+}
+
+.loginsignup-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Gaps kam kar diye hain */
+}
+
+.loginsignup-fields input {
+  height: 42px; /* Input height reduce ki hai */
+  width: 100%;
+  padding-left: 15px;
+  border: 1px solid #c9c9c9;
+  outline: none;
+  color: #5c5c5c;
+  font-size: 14px;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.loginsignup-container button {
+  width: 100%;
+  height: 42px; /* Button height reduce ki hai */
+  color: white;
+  background: #ff4141;
+  margin-top: 15px;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: 0.3s ease;
+}
+
+.loginsignup-container button:hover {
+  background: #e03232;
+}
+
+.loginsignup-login {
+  margin-top: 12px;
+  color: #5c5c5c;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.loginsignup-login span {
+  color: #ff4141;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.loginsignup-agree {
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+  gap: 8px;
+  color: #5c5c5c;
+  font-size: 12px;
+}
+
+.loginsignup-agree input {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+@media (max-width: 480px) {
+  .loginsignup-container {
+    padding: 25px 20px;
+  }
+
+  .loginsignup-container h1 {
+    font-size: 24px;
+  }
+}
