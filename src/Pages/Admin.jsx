@@ -23,6 +23,7 @@ const Admin = () => {
             { id: 101, date: '2026-07-22', items: 'Floral Print Top (x2)', total: 170, status: 'Pending', method: 'Easypaisa' },
             { id: 102, date: '2026-07-22', items: 'Winter High Neck (x1)', total: 85, status: 'Delivered', method: 'JazzCash' }
         ]
+    
     })
 
     useEffect(() => {
