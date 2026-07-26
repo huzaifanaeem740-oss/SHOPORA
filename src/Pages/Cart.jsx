@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import './CSS/Cart.css';
 // import { ShopContext } from '../Context/ShopContext';
 import remove_icon from '../Components/Assets/cart_cross_icon.png';
