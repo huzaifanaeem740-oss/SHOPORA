@@ -91,6 +91,12 @@
   font-size: 14px;
 }
 
+.productdisplay-right-stars img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
 .productdisplay-right-prices {
   display: flex;
   gap: 18px;
@@ -164,16 +170,7 @@
   background: #e63939;
 }
 
-.productdisplay-right-category {
-  margin-top: 15px;
-  font-size: 13px;
-  color: #656565;
-}
-
-.productdisplay-right-category span {
-  font-weight: 600;
-}
-
+/* Responsive Media Queries */
 @media (min-width: 768px) {
   .productdisplay {
     margin: 20px 40px;

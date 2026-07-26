@@ -1,13 +1,13 @@
-import React, { useContext } from 'react'
-import './ProductDisplay.css'
-import star_icon from '../Assets/star_icon.png'
-import star_dull_icon from '../Assets/star_dull_icon.png'
-import heart_icom from '../Assets/heart_icom.png'
-import { ShopContext } from '../../Context/ShopContext'
+import React, { useContext } from 'react';
+import './ProductDisplay.css';
+import star_icon from '../Assets/star_icon.png';
+import star_dull_icon from '../Assets/star_dull_icon.png';
+import heart_icom from '../Assets/heart_icom.png';
+import { ShopContext } from '../../Context/ShopContext';
 
 const ProductDisplay = (props) => {
   const { product } = props;
-  const { addToCart, wishlistItems, addToWishlist, removeFromWishlist } = useContext(ShopContext);
+  const { addToCart, wishlistItems = [], addToWishlist, removeFromWishlist } = useContext(ShopContext);
 
   const isWishlisted = wishlistItems.includes(product.id);
 
@@ -31,7 +31,7 @@ const ProductDisplay = (props) => {
         <div className="productdisplay-img">
           <img className='productdisplay-main-img' src={product.image} alt="" />
           <img 
-            className={`wishlist-heart-icon PKR-{isWishlisted ? 'active' : ''}`} 
+            className={`wishlist-heart-icon ${isWishlisted ? 'active' : ''}`} 
             src={heart_icom} 
             alt="Wishlist" 
             onClick={handleWishlistClick}
@@ -74,7 +74,7 @@ const ProductDisplay = (props) => {
         <button onClick={() => { addToCart(product.id) }}>ADD TO CART</button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default ProductDisplay;

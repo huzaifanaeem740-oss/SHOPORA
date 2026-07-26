@@ -1,5 +1,5 @@
-import React from 'react'
-import './DescriptionBox.css'
+import React from 'react';
+import './DescriptionBox.css';
 
 const DescriptionBox = () => {
   return (
@@ -17,7 +17,7 @@ const DescriptionBox = () => {
         </p>
       </div>
     </div>
-  )
+  );
 }
 
 export default DescriptionBox;

@@ -1,152 +1,121 @@
 .newsletter {
-  width: 90%;
-  max-width: 1280px;
-  min-height: 300px;
-  margin: 50px auto;
-  padding: 40px 20px;
+  width: 85%;
+  max-width: 1200px;
+  height: 520px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  text-align: center;
-  background: linear-gradient(180deg, #fde1ff 0%, #e1ffea22 60%);
-  border-radius: 12px;
+  justify-content: center;
+  margin: 60px auto 120px auto;
+  padding: 40px 60px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+  border-radius: 28px;
+  gap: 24px;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   box-sizing: border-box;
 }
 
 .newsletter h1 {
-  color: #454545;
-  font-size: 24px;
-  font-weight: 600;
+  color: #0f172a;
+  font-size: 48px;
+  font-weight: 800;
   margin: 0;
-  white-space: normal;
+  text-align: center;
+  letter-spacing: -0.5px;
 }
 
 .newsletter p {
-  color: #454545;
-  font-size: 14px;
-  margin: 12px 0 24px;
+  color: #475569;
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+  text-align: center;
 }
 
+/* Email Input Box Container */
 .newsletter div {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  background: #ffffff;
   width: 100%;
-  max-width: 600px;
-  height: auto;
-  background: transparent;
-  gap: 12px;
+  max-width: 680px;
+  height: 64px;
+  border-radius: 80px;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  margin-top: 10px;
+  overflow: hidden;
 }
 
 .newsletter input {
-  width: 100%;
-  height: 50px;
-  padding: 0 20px;
-  margin-left: 0;
-  border: 1px solid #e3e3e3;
-  border-radius: 80px;
+  flex: 1;
+  padding-left: 30px;
+  border: none;
   outline: none;
-  background: #fff;
-  color: #616161;
-  font-size: 14px;
-  font-family: 'Poppins', sans-serif;
-  box-sizing: border-box;
+  color: #1e293b;
+  font-size: 16px;
+  background: transparent;
 }
 
 .newsletter input::placeholder {
-  color: #8c8c8c;
+  color: #94a3b8;
 }
 
+/* Subscribe Button */
 .newsletter button {
-  width: 100%;
-  height: 50px;
-  border: none;
+  width: 190px;
+  height: 100%;
   border-radius: 80px;
-  background: #000;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 500;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  border: none;
+  transition: all 0.3s ease;
 }
 
 .newsletter button:hover {
-  background: #333;
+  background: #1e293b;
+  transform: scale(1.02);
 }
 
-@media (min-width: 768px) {
+/* Responsive Media Queries */
+@media (max-width: 768px) {
   .newsletter {
-    width: 85%;
-    margin: 80px auto;
-    padding: 50px 40px;
+    height: auto;
+    padding: 40px 20px;
+    width: 90%;
   }
-
+  
   .newsletter h1 {
-    font-size: 36px;
+    font-size: 28px;
   }
 
   .newsletter p {
-    font-size: 18px;
-    margin: 16px 0 32px;
-  }
-
-  .newsletter div {
-    flex-direction: row;
-    height: 60px;
-    background: #fff;
-    border: 1px solid #e3e3e3;
-    border-radius: 80px;
-    gap: 0;
-  }
-
-  .newsletter input {
-    height: 100%;
-    border: none;
-    background: transparent;
     font-size: 15px;
-    padding-left: 25px;
   }
-
-  .newsletter button {
-    width: 180px;
-    height: 100%;
-  }
-}
-
-@media (min-width: 1024px) {
-  .newsletter {
-    width: 80%;
-    height: 40vh;
-    margin: 120px auto;
-    padding: 0 80px;
-  }
-
-  .newsletter h1 {
-    font-size: 48px;
-  }
-
-  .newsletter p {
-    font-size: 20px;
-    margin: 20px 0 40px;
-  }
-
+  
   .newsletter div {
-    width: 800px;
-    height: 70px;
+    flex-direction: column;
+    height: auto;
+    border-radius: 16px;
+    padding: 8px;
+    gap: 8px;
   }
-
+  
   .newsletter input {
-    width: 580px;
-    margin-left: 30px;
-    padding-left: 0;
-    font-size: 16px;
+    width: 100%;
+    height: 45px;
+    padding-left: 15px;
+    text-align: center;
   }
-
+  
   .newsletter button {
-    width: 210px;
-    height: 70px;
-    font-size: 16px;
+    width: 100%;
+    height: 45px;
+    border-radius: 12px;
   }
 }

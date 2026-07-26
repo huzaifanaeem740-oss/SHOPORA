@@ -1,34 +1,37 @@
-import p1_img from './product_1.png'
-import p2_img from './product_2.png'
-import p3_img from './product_3.png'
-import p4_img from './product_4.png'
+import p1 from "./p1.webp";
+import p2 from "./p2.webp";
+import p3 from "./p3.jpg";
+import p4 from "./p4.png";
 
-let data_product = [
+const data_product = [
   {
-    id:1,
-    name:"V-Neck Wrap Front Peplum Top",
-    image:p1_img,
-    new_price:6000,
-    old_price:9000,
+    id: 1,
+    name: "Nike Air jordan Luxury Sky-blue",
+    image: p1,
+    new_price: 8999,
+    old_price: 10000,
   },
-  {id:2,
-    name:"High-Neck Ribbed Knit Crop Top",
-    image:p2_img,
-    new_price:3999,
-    old_price:5000,
+  {
+    id: 2,
+    name: "Nike air jordan 1 luxury Purple",
+    image: p2,
+    new_price: 9999,
+    old_price: 12000,
   },
-  {id:3,
-    name:"Boho Floral Print Puff Sleeve Top",
-    image:p3_img,
-    new_price:3100,
-    old_price:4000,
+  {
+    id: 3,
+    name: "Nike air jordan 1 luxury Green",
+    image: p3,
+    new_price: 8999,
+    old_price: 10000,
   },
-  {id:4,
-    name:"Casual Drop-Shoulder Oversized Pocket ",
-    image:p4_img,
-    new_price:2999,
-    old_price:3500,
-  },
+  {
+    id: 4,
+    name: "Nike air jordans 1 luxury Orange",
+    image: p4,
+    new_price: 12000,
+    old_price: 15000,
+  }
 ];
 
 export default data_product;

@@ -1,3 +1,21 @@
+
+:root {
+  --bg-primary: #FDFBF7;       
+  --bg-card: #FFFFFF;          /* Card Background */
+  --text-main: #171717;         /* Deep Vintage Black */
+  --text-muted: #78716C;        /* Warm Grey Subtitles */
+  --accent-orange: #EA580C;     /* Streetwear Rust Orange */
+  --border-color: #E7E5E4;      /* Soft Card Borders */
+}
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+
 .App {
   text-align: center;
 }

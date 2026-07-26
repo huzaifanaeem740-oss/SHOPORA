@@ -1,185 +1,172 @@
-import React, { useContext, useState } from 'react'
-import './CartItems.css'
-import { ShopContext } from '../../Context/ShopContext'
-import remove_icon from '../Assets/cart_cross_icon.png'
+import React, { useContext, useState } from 'react';
+import './CartItems.css';
+import { ShopContext } from '../Context/ShopContext';
+import remove_icon from '../Components/Assets/cart_cross_icon.png';
 
 const CartItems = () => {
-    const { getTotalCartAmount, all_product, cartItems, removeFromCart } = useContext(ShopContext)
+  const { getTotalCartAmount, all_product, cartItems, removeFromCart } = useContext(ShopContext);
+  
+  const [coupon, setCoupon] = useState('');
+  const [discount, setDiscount] = useState(0);
+  const [couponMessage, setCouponMessage] = useState('');
+  const [showCheckoutPopup, setShowCheckoutPopup] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('COD');
+  
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+
+  const handleApplyCoupon = () => {
+    if (coupon.trim().toUpperCase() === 'FARAZ') {
+      setDiscount(0.75);
+      setCouponMessage('Coupon applied successfully! 75% OFF');
+    } else {
+      setDiscount(0);
+      setCouponMessage('Invalid Coupon Code');
+    }
+  };
+
+  const subtotal = getTotalCartAmount();
+  const discountedTotal = Math.round(subtotal * (1 - discount));
+
+  const handleWhatsAppCheckout = (e) => {
+    e.preventDefault();
     
-    const [promoInput, setPromoInput] = useState('')
-    const [discount, setDiscount] = useState(0)
-    const [promoApplied, setPromoApplied] = useState(false)
-    const [promoError, setPromoError] = useState('')
+    let itemsDetails = '';
+    all_product.forEach((product) => {
+      if (cartItems[product.id] > 0) {
+        itemsDetails += `- ${product.name} x ${cartItems[product.id]} = PKR ${product.new_price * cartItems[product.id]}\n`;
+      }
+    });
 
-    const [showPayment, setShowPayment] = useState(false)
-    const [paymentMethod, setPaymentMethod] = useState('JazzCash')
+    const message = `*New Order Placed via Vestro X!*\n\n*Customer Details:*\nName: ${name}\nPhone: ${phone}\nAddress: ${address}\n\n*Products:*\n${itemsDetails}\n*Subtotal:* PKR ${subtotal}\n*Discounted Total:* PKR ${discountedTotal} ${discount > 0 ? '(75% OFF)' : ''}\n*Payment Method:* ${paymentMethod}\n*Coupon Used:* ${coupon ? coupon : 'None'}`;
 
-const whatsappUrl = `https://wa.me/923282134905?text=Order%20Details...`;
-    const subtotal = getTotalCartAmount()
+    const whatsappUrl = `https://wa.me/923282134905?text=${encodeURIComponent(message)}`;
+    window.location.href = whatsappUrl;
+  };
 
-    const handleApplyPromo = () => {
-        if (promoInput.trim().toUpperCase() === 'FARAZ') {
-            setDiscount(75)
-            setPromoApplied(true)
-            setPromoError('')
-        } else {
-            setPromoError('Invalid Promo Code')
-            setDiscount(0)
-            setPromoApplied(false)
+  return (
+    <div className='cartitems'>
+      <div className='cartitems-format-main'>
+        <p>Products</p>
+        <p>Title</p>
+        <p>Price</p>
+        <p>Quantity</p>
+        <p>Total</p>
+        <p>Remove</p>
+      </div>
+      <hr />
+      {all_product.map((e) => {
+        if (cartItems[e.id] > 0) {
+          return (
+            <div key={e.id}>
+              <div className="cartitems-format cartitems-format-main">
+                <img src={e.image} alt="" className='carticon-product-icon' />
+                <p>{e.name}</p>
+                <p>PKR {e.new_price}</p>
+                <button className='cartitems-quantity'>{cartItems[e.id]}</button>
+                <p>PKR {e.new_price * cartItems[e.id]}</p>
+                <img src={remove_icon} onClick={() => removeFromCart(e.id)} alt="" style={{cursor: 'pointer'}} />
+              </div>
+              <hr />
+            </div>
+          );
         }
-    }
+        return null;
+      })}
 
-    const discountAmount = (subtotal * discount) / 100
-    const finalTotal = subtotal - discountAmount
-
-    const handleConfirmOrder = () => {
-        if (finalTotal === 0) return
-
-        let orderDetails = "Hello! I want to place an order:%0A%0A"
-        
-        all_product.forEach((item) => {
-            if (cartItems[item.id] > 0) {
-                orderDetails += `- PKR-{item.name} (Qty: PKR-{cartItems[item.id]}) - PKR-{item.new_price * cartItems[item.id]}%0A`
-            }
-        })
-
-        orderDetails += `%0ASubtotal: $${subtotal.toFixed(2)}`
-        if (promoApplied) {
-            orderDetails += `%0ADiscount (75% FARAZ): -$${discountAmount.toFixed(2)}`
-        }
-        orderDetails += `%0ATotal Amount: PKR-{finalTotal.toFixed(2)}`
-        orderDetails += `%0APayment Method: ${paymentMethod}`
-
-        const whatsappUrl = `https://wa.me/${923282134905}?text=${orderDetails}`
-        window.open(whatsappUrl, '_blank')
-    }
-
-    return (
-        <div className='cartitems'>
-            <div className="cartitems-format-main">
-                <p>Products</p>
-                <p>Title</p>
-                <p>Price</p>
-                <p>Quantity</p>
-                <p>Total</p>
-                <p>Remove</p>
+      <div className="cartitems-down">
+        <div className="cartitems-total">
+          <h1>Cart Totals</h1>
+          <div>
+            <div className="cartitems-total-item">
+              <p>Subtotal</p>
+              <p>PKR {subtotal}</p>
             </div>
             <hr />
-            {all_product.map((e) => {
-                if (cartItems[e.id] > 0) {
-                    return (
-                        <div key={e.id}>
-                            <div className="cartitems-format cartitems-format-main">
-                                <img src={e.image} alt="" className='carticon-product-icon' />
-                                <p className='cartitems-product-title'>{e.name}</p>
-                                <p>PKR-{e.new_price}</p>
-                                <button className='cartitems-quantity'>{cartItems[e.id]}</button>
-                                <p>PKR-{e.new_price * cartItems[e.id]}</p>
-                                <img className='cartitems-remove-icon' src={remove_icon} onClick={() => { removeFromCart(e.id) }} alt="" />
-                            </div>
-                            <hr />
-                        </div>
-                    )
-                }
-                return null
-            })}
-            <div className="cartitems-down">
-                <div className="cartitems-total">
-                    <h2>Cart Totals</h2>
-                    <div>
-                        <div className="cartitems-total-item">
-                            <p>Subtotal</p>
-                            <p>${subtotal.toFixed(2)}</p>
-                        </div>
-                        <hr />
-                        {promoApplied && (
-                            <>
-                                <div className="cartitems-total-item discount-row">
-                                    <p>Discount (75% - FARAZ)</p>
-                                    <p>-${discountAmount.toFixed(2)}</p>
-                                </div>
-                                <hr />
-                            </>
-                        )}
-                        <div className="cartitems-total-item">
-                            <p>Shipping Fee</p>
-                            <p>Free</p>
-                        </div>
-                        <hr />
-                        <div className="cartitems-total-item">
-                            <h3>Total</h3>
-                            <h3>${finalTotal.toFixed(2)}</h3>
-                        </div>
-                    </div>
-
-                    {!showPayment ? (
-                        <button onClick={() => setShowPayment(true)}>PROCEED TO CHECKOUT</button>
-                    ) : (
-                        <div className="cartitems-payment-section">
-                            <h3>Select Payment Method:</h3>
-                            <div className="payment-options">
-                                <label className={paymentMethod === 'JazzCash' ? 'selected' : ''}>
-                                    <input 
-                                        type="radio" 
-                                        name="payment" 
-                                        value="JazzCash" 
-                                        checked={paymentMethod === 'JazzCash'} 
-                                        onChange={(e) => setPaymentMethod(e.target.value)}
-                                    />
-                                    JazzCash
-                                </label>
-                                <label className={paymentMethod === 'Easypaisa' ? 'selected' : ''}>
-                                    <input 
-                                        type="radio" 
-                                        name="payment" 
-                                        value="Easypaisa" 
-                                        checked={paymentMethod === 'Easypaisa'} 
-                                        onChange={(e) => setPaymentMethod(e.target.value)}
-                                    />
-                                    Easypaisa
-                                </label>
-                                <label className={paymentMethod === 'Credit/Debit Card' ? 'selected' : ''}>
-                                    <input 
-                                        type="radio" 
-                                        name="payment" 
-                                        value="Credit/Debit Card" 
-                                        checked={paymentMethod === 'Credit/Debit Card'} 
-                                        onChange={(e) => setPaymentMethod(e.target.value)}
-                                    />
-                                    Credit / Debit Card
-                                </label>
-                                <label className={paymentMethod === 'Cash on Delivery' ? 'selected' : ''}>
-                                    <input 
-                                        type="radio" 
-                                        name="payment" 
-                                        value="Cash on Delivery" 
-                                        checked={paymentMethod === 'Cash on Delivery'} 
-                                        onChange={(e) => setPaymentMethod(e.target.value)}
-                                    />
-                                    Cash on Delivery (COD)
-                                </label>
-                            </div>
-                            <button className="confirm-btn" onClick={handleConfirmOrder}>CONFIRM & PLACE ORDER</button>
-                        </div>
-                    )}
-                </div>
-                <div className="cartitems-promocode">
-                    <p>If you have a promo code, enter it here</p>
-                    <div className="cartitems-promobox">
-                        <input 
-                            type="text" 
-                            placeholder='promo code' 
-                            value={promoInput} 
-                            onChange={(e) => setPromoInput(e.target.value)}
-                        />
-                        <button onClick={handleApplyPromo}>Submit</button>
-                    </div>
-                    {promoApplied && <p className="promo-success-msg">Code FARAZ Applied! 75% Off</p>}
-                    {promoError && <p className="promo-error-msg">{promoError}</p>}
-                </div>
+            <div className="cartitems-total-item">
+              <p>Shipping Fee</p>
+              <p>Free</p>
             </div>
+            <hr />
+            <div className="cartitems-total-item">
+              <h3>Total</h3>
+              <h3>PKR {discountedTotal} {discount > 0 && <span style={{fontSize: '12px', color: 'green'}}>(75% OFF)</span>}</h3>
+            </div>
+          </div>
+          <button onClick={() => setShowCheckoutPopup(true)}>PROCEED TO CHECKOUT</button>
         </div>
-    )
-}
 
-export default CartItems
+        <div className="cartitems-promocode">
+          <p>If you have a promo code, Enter it here</p>
+          <div className="cartitems-promobox">
+            <input 
+              type="text" 
+              placeholder="" 
+              value={coupon} 
+              onChange={(e) => setCoupon(e.target.value)} 
+            />
+            <button onClick={handleApplyCoupon}>Submit</button>
+          </div>
+          {couponMessage && <p style={{ fontSize: '13px', color: discount > 0 ? 'green' : 'red', marginTop: '5px' }}>{couponMessage}</p>}
+        </div>
+      </div>
+
+      {showCheckoutPopup && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+          background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
+        }}>
+          <div style={{ background: 'white', padding: '30px', borderRadius: '10px', width: '400px', maxWidth: '90%' }}>
+            <h2>Checkout Details</h2>
+            <form onSubmit={handleWhatsAppCheckout} style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '15px' }}>
+              <input 
+                type="text" 
+                placeholder="Enter Your Name" 
+                value={name} 
+                onChange={(e) => setName(e.target.value)} 
+                required 
+                style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
+              />
+              <input 
+                type="text" 
+                placeholder="Enter Phone Number" 
+                value={phone} 
+                onChange={(e) => setPhone(e.target.value)} 
+                required 
+                style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
+              />
+              <textarea 
+                placeholder="Enter Delivery Address" 
+                value={address} 
+                onChange={(e) => setAddress(e.target.value)} 
+                required 
+                style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc', resize: 'none' }}
+              />
+
+              <div>
+                <label style={{ fontWeight: '600', display: 'block', marginBottom: '8px' }}>Select Payment Method:</label>
+                <div style={{ display: 'flex', gap: '15px', fontSize: '14px' }}>
+                  <label><input type="radio" name="popupPayment" value="COD" checked={paymentMethod === 'COD'} onChange={(e) => setPaymentMethod(e.target.value)} /> COD</label>
+                  <label><input type="radio" name="popupPayment" value="JazzCash" checked={paymentMethod === 'JazzCash'} onChange={(e) => setPaymentMethod(e.target.value)} /> JazzCash</label>
+                  <label><input type="radio" name="popupPayment" value="EasyPaisa" checked={paymentMethod === 'EasyPaisa'} onChange={(e) => setPaymentMethod(e.target.value)} /> EasyPaisa</label>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                <button type="submit" style={{ flex: 1, background: '#ff4141', color: 'white', border: 'none', padding: '12px', cursor: 'pointer', borderRadius: '5px', fontWeight: '600' }}>
+                  CONFIRM & ORDER VIA WHATSAPP
+                </button>
+                <button type="button" onClick={() => setShowCheckoutPopup(false)} style={{ background: '#ccc', border: 'none', padding: '12px', cursor: 'pointer', borderRadius: '5px' }}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CartItems;
