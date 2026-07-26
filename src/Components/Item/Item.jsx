@@ -1,18 +1,41 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Item.css';
 import { Link } from 'react-router-dom';
+import { ShopContext } from '../../Context/ShopContext';
 
 const Item = (props) => {
+  const { wishlistItems, toggleWishlist } = useContext(ShopContext);
+  const isWishlisted = wishlistItems[props.id];
+
   return (
     <div className='item'>
-      
       <div className="item-img-container">
-        {/* Wishlist / Heart Icon (Make sure apka icon path yahan sahi ho) */}
-        <span className="item-heart-icon">♡</span> 
-        
-        {/* Product Image */}
+        {/* Heart Icon */}
+        <div 
+          className="item-heart-icon"
+          onClick={(e) => {
+            e.preventDefault();
+            toggleWishlist(props.id);
+          }}
+          title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="16" 
+            height="16" 
+            viewBox="0 0 24 24" 
+            fill={isWishlisted ? "#ff4141" : "none"} 
+            stroke={isWishlisted ? "#ff4141" : "#171717"} 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </div>
+
         <Link to={`/product/${props.id}`}>
-          <img onClick={() => window.scrollTo(0,0)} src={props.image} alt="" />
+          <img onClick={() => window.scrollTo(0, 0)} src={props.image} alt={props.name} />
         </Link>
       </div>
 
@@ -26,7 +49,6 @@ const Item = (props) => {
           PKR {props.old_price}
         </div>
       </div>
-
     </div>
   );
 };

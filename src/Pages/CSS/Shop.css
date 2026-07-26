@@ -1,0 +1,55 @@
+.shop {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  background: #fbfbfb;
+  padding-bottom: 50px;
+}
+
+/* Banner Styling */
+.shop-banner-container {
+  width: 85%;
+  max-width: 1400px;
+  margin: 40px auto 20px auto;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.shop-banner-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.shop-banner-container img:hover {
+  transform: scale(1.01);
+}
+
+/* --- RESPONSIVE MEDIA QUERIES --- */
+@media (max-width: 1024px) {
+  .shop-banner-container {
+    width: 90%;
+    margin: 30px auto 15px auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .shop-banner-container {
+    width: 92%;
+    margin: 20px auto 10px auto;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .shop-banner-container {
+    width: 95%;
+    margin: 15px auto 10px auto;
+  }
+}

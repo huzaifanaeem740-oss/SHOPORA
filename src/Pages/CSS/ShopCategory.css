@@ -1,45 +1,88 @@
 .shop-category {
-  width: 85%;
-  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 100px;
 }
 
 .shopcategory-banner {
   display: block;
-  margin: 30px auto;
-  width: 100%;
+  margin: 20px auto;
+  width: 70%;
+  height: auto;
+  object-fit: contain;
 }
 
 .shopcategory-indexSort {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  margin-bottom: 30px;
+  margin-top: 20px;
+  width: 70%;
+  position: relative;
+}
+
+.shopcategory-sort-container {
+  position: relative;
 }
 
 .shopcategory-sort {
   padding: 10px 20px;
   border-radius: 40px;
   border: 1px solid #888;
+  font-size: 14px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+}
+
+.shopcategory-sort img {
+  width: 12px;
+}
+
+/* Dropdown menu styling jab click ho */
+.category-dropdown-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.category-dropdown-menu a {
+  padding: 12px 20px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.category-dropdown-menu a:hover {
+  background: #f2f2f2;
 }
 
 .shopcategory-products {
-  display: flex;
-  flex-wrap: wrap;
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 30px;
-  justify-content: center;
-}
-
-.shopcategory-products > div {
-  width: 23%;
-  min-width: 250px;
+  width: 70%;
 }
 
 .shopcategory-loadmore {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 80px auto;
+  margin-top: 150px;
   width: 233px;
   height: 69px;
   border-radius: 75px;
@@ -50,20 +93,34 @@
   cursor: pointer;
 }
 
-@media(max-width: 1200px) {
-  .shopcategory-products > div {
-    width: 31%;
+/* --- Media Queries for Responsiveness --- */
+
+@media(max-width: 1280px) {
+  .shopcategory-products {
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 80%;
+  }
+  .shopcategory-banner, .shopcategory-indexSort {
+    width: 80%;
   }
 }
 
 @media(max-width: 800px) {
-  .shopcategory-products > div {
-    width: 48%;
+  .shopcategory-products {
+    grid-template-columns: 1fr 1fr;
+    width: 90%;
+  }
+  .shopcategory-banner, .shopcategory-indexSort {
+    width: 90%;
   }
 }
 
 @media(max-width: 500px) {
-  .shopcategory-products > div {
-    width: 100%;
+  .shopcategory-products {
+    grid-template-columns: 1fr;
+    width: 95%;
+  }
+  .shopcategory-banner, .shopcategory-indexSort {
+    width: 95%;
   }
 }
