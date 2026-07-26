@@ -3,88 +3,218 @@ import all_product from "../Components/Assets/all_product";
 
 export const ShopContext = createContext(null);
 
+
 const getDefaultCart = () => {
+
   let cart = {};
-  for (let index = 0; index < all_product.length + 1; index++) {
-    cart[index] = 0;
+
+  for (let i = 1; i < all_product.length + 1; i++) {
+    cart[i] = 0;
   }
+
   return cart;
+
 };
+
+
 
 const getDefaultWishlist = () => {
+
   let wishlist = {};
-  for (let index = 0; index < all_product.length + 1; index++) {
-    wishlist[index] = 0;
+
+  for (let i = 1; i < all_product.length + 1; i++) {
+    wishlist[i] = 0;
   }
+
   return wishlist;
+
 };
+
+
 
 const ShopContextProvider = (props) => {
+
+
   const [cartItems, setCartItems] = useState(getDefaultCart());
+
   const [wishlistItems, setWishlistItems] = useState(getDefaultWishlist());
 
+
+
+  // ADD TO CART
+
   const addToCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+
+    setCartItems((prev) => ({
+      ...prev,
+      [itemId]: prev[itemId] + 1
+    }));
+
   };
+
+
+
+  // REMOVE FROM CART
 
   const removeFromCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: Math.max(prev[itemId] - 1, 0) }));
+
+    setCartItems((prev) => ({
+      ...prev,
+      [itemId]: prev[itemId] - 1
+    }));
+
   };
+
+
+
+  // ADD TO WISHLIST
 
   const addToWishlist = (itemId) => {
-    setWishlistItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
-  };
 
-  const removeFromWishlist = (itemId) => {
-    setWishlistItems((prev) => ({ ...prev, [itemId]: Math.max(prev[itemId] - 1, 0) }));
-  };
-
-  // Toggle Wishlist function (agar item pehle se hai toh remove karega, nahi toh add karega)
-  const toggleWishlist = (itemId) => {
     setWishlistItems((prev) => ({
       ...prev,
-      [itemId]: prev[itemId] > 0 ? 0 : 1
+      [itemId]: 1
     }));
+
   };
+
+
+
+  // REMOVE FROM WISHLIST
+
+  const removeFromWishlist = (itemId) => {
+
+    setWishlistItems((prev) => ({
+      ...prev,
+      [itemId]: 0
+    }));
+
+  };
+
+
+
+  // TOTAL CART ITEMS
 
   const getTotalCartItems = () => {
+
     let totalItem = 0;
+
+
     for (const item in cartItems) {
-      if (cartItems[item] > 0) {
+
+      if(cartItems[item] > 0){
+
         totalItem += cartItems[item];
+
       }
+
     }
+
+
     return totalItem;
+
   };
+
+
+
+  // TOTAL WISHLIST ITEMS
 
   const getTotalWishlistItems = () => {
-    let totalWishlist = 0;
+
+    let totalItem = 0;
+
+
     for (const item in wishlistItems) {
-      if (wishlistItems[item] > 0) {
-        totalWishlist += 1; // Har unique item ko 1 count karega
+
+      if(wishlistItems[item] > 0){
+
+        totalItem += wishlistItems[item];
+
       }
+
     }
-    return totalWishlist;
+
+
+    return totalItem;
+
   };
+
+
+
+  // TOTAL CART AMOUNT
+
+  const getTotalCartAmount = () => {
+
+    let totalAmount = 0;
+
+
+    for(const item in cartItems){
+
+      if(cartItems[item] > 0){
+
+        let product = all_product.find(
+          (e)=> e.id === Number(item)
+        );
+
+
+        if(product){
+
+          totalAmount += product.new_price * cartItems[item];
+
+        }
+
+      }
+
+    }
+
+
+    return totalAmount;
+
+  };
+
+
+
 
   const contextValue = {
+
     all_product,
+
     cartItems,
-    addToCart,
-    removeFromCart,
-    getTotalCartItems,
+
     wishlistItems,
+
+
+    addToCart,
+
+    removeFromCart,
+
+
     addToWishlist,
+
     removeFromWishlist,
-    toggleWishlist, // <-- Yeh yahan shamil kar diya gaya hai
+
+
+    getTotalCartItems,
+
     getTotalWishlistItems,
+
+    getTotalCartAmount
+
   };
 
+
+
   return (
+
     <ShopContext.Provider value={contextValue}>
+
       {props.children}
+
     </ShopContext.Provider>
+
   );
+
 };
+
 
 export default ShopContextProvider;
