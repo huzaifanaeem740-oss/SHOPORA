@@ -4,7 +4,7 @@ import { ShopContext } from '../Context/ShopContext';
 import Item from '../Components/Item/Item';
 
 const Wishlist = () => {
-  const { all_product, wishlistItems, toggleWishlist, addToCart } = useContext(ShopContext);
+  const { all_product, wishlistItems, toggleWishlist, } = useContext(ShopContext);
 
   return (
     <div className='wishlist'>
