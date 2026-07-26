@@ -1,6 +1,5 @@
 .item {
   width: 100%;
-  max-width: 280px;
   background: #ffffff;
   border-radius: 8px;
   overflow: hidden;
@@ -14,36 +13,32 @@
   transform: scale(1.03);
 }
 
-/* Image container ko relative banaya taake heart icon absolute position ho sake */
 .item-img-container {
   position: relative;
   width: 100%;
+  background: #f9f9f9;
 }
 
 .item-img-container img {
   width: 100%;
-  height: auto;
+  height: 220px;
   object-fit: cover;
   display: block;
 }
 
-/* Heart icon ko image ke upar top-right par fix karne ke liye */
 .item-heart-icon {
   position: absolute;
   top: 10px;
   right: 10px;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.8);
   border-radius: 50%;
   padding: 5px;
-  transition: 0.2s;
-}
-
-.item-heart-icon:hover {
-  background: white;
-  transform: scale(1.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .item p {
@@ -51,11 +46,14 @@
   font-size: 14px;
   color: #171717;
   line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .item-prices {
   display: flex;
-  gap: 20px;
+  gap: 15px;
   margin: 6px 15px 15px 15px;
   font-size: 14px;
   font-weight: 600;
@@ -68,10 +66,4 @@
 .item-price-old {
   color: #8c8c8c;
   text-decoration: line-through;
-}
-
-@media(max-width: 500px) {
-  .item {
-    max-width: 100%;
-  }
 }
