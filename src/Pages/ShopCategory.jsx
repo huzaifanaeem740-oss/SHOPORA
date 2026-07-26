@@ -8,6 +8,7 @@ import banner_women from '../Components/Assets/banner_womens.png';
 import banner_kids from '../Components/Assets/banner_kids.png';
 
 const ShopCategory = (props) => {
+
   const { all_product } = useContext(ShopContext);
 
   let currentBanner = banner_mens;
@@ -25,7 +26,9 @@ const ShopCategory = (props) => {
       { key: "fragrances", title: "Fragrances & Perfumes" },
       { key: "cap", title: "Caps" }
     ];
-  } else if (props.category === "women") {
+  }
+
+  else if (props.category === "women") {
     currentBanner = banner_women;
     sectionTypes = [
       { key: "shirt", title: "Shirts & Tops" },
@@ -33,11 +36,13 @@ const ShopCategory = (props) => {
       { key: "footwear", title: "Footwear & Sneakers" },
       { key: "slippers", title: "Slippers & Sandals" },
       { key: "watch", title: "Watches" },
-      { key: "belt", title: "Belts" },       // Women belts section
-      { key: "perfume", title: "Perfumes" }, // Women perfumes section
-      { key: "cap", title: "Caps" }          // Women caps section
+      { key: "belt", title: "Belts" },
+      { key: "perfume", title: "Perfumes" },
+      { key: "cap", title: "Caps" }
     ];
-  } else if (props.category === "kids") {
+  }
+
+  else if (props.category === "kids") {
     currentBanner = banner_kids;
     sectionTypes = [
       { key: "shirt", title: "T-Shirts & Shirts" },
@@ -52,47 +57,69 @@ const ShopCategory = (props) => {
   }
 
   return (
-    <div className='shop-category'>
-      <img className='shopcategory-banner' src={currentBanner} alt="Banner" />
+    <div className="shop-category">
 
-      <div className="shopcategory-sections" style={{ width: '80%', margin: '0 auto' }}>
+      <img
+        className="shopcategory-banner"
+        src={currentBanner}
+        alt=""
+      />
+
+      <div className="shopcategory-sections">
+
         {sectionTypes.map((section, index) => {
+
           const categoryProducts = all_product.filter(
-            item => item.category === props.category && item.type === section.key
+            item =>
+              item.category === props.category &&
+              item.type === section.key
           );
 
           if (categoryProducts.length === 0) return null;
 
           return (
-            <div key={index} style={{ marginTop: '50px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '25px' }}>
-                <div style={{ flex: 1, height: '1px', backgroundColor: '#d0d0d0' }}></div>
-                <h2 style={{ padding: '0 20px', fontSize: '24px', fontWeight: '700', color: '#333', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                  {section.title}
-                </h2>
-                <div style={{ flex: 1, height: '1px', backgroundColor: '#d0d0d0' }}></div>
+
+            <div className="category-section" key={index}>
+
+              <div className="category-title">
+
+                <div className="line"></div>
+
+                <h2>{section.title}</h2>
+
+                <div className="line"></div>
+
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '30px' }}>
-                {categoryProducts.map((item, i) => (
-                  <Item 
-                    key={i} 
-                    id={item.id} 
-                    name={item.name} 
-                    image={item.image} 
-                    new_price={item.new_price} 
-                    old_price={item.old_price} 
+              <div className="shopcategory-products">
+
+                {categoryProducts.map((item) => (
+
+                  <Item
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    image={item.image}
+                    new_price={item.new_price}
+                    old_price={item.old_price}
                   />
+
                 ))}
+
               </div>
+
             </div>
+
           );
+
         })}
+
       </div>
 
-      <div className="shopcategory-loadmore" style={{ margin: '80px auto' }}>
+      <div className="shopcategory-loadmore">
         Explore More
       </div>
+
     </div>
   );
 };

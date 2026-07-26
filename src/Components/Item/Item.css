@@ -1,33 +1,36 @@
 .item {
   width: 100%;
-  background: #ffffff;
-  border-radius: 8px;
+  background: #fff;
+  border-radius: 12px;
   overflow: hidden;
-  border: 1px solid #eaeaea;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-sizing: border-box;
+  border: 1px solid #ececec;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
 }
 
 .item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
 
 .item-img-container {
   position: relative;
   width: 100%;
-  background: #f9f9f9;
+  height: 320px;
+  background: #f8f8f8;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .item-img-container img {
   width: 100%;
-  height: 240px;
-  object-fit: cover;
-  display: block;
+  height: 100%;
+  object-fit: contain;
+  padding: 15px;
   transition: transform 0.3s ease;
 }
 
@@ -39,96 +42,125 @@
   position: absolute;
   top: 12px;
   right: 12px;
-  width: 22px;
-  height: 22px;
-  cursor: pointer;
-  background: rgba(255, 255, 255, 0.9);
+  width: 34px;
+  height: 34px;
+  background: rgba(255,255,255,0.95);
   border-radius: 50%;
-  padding: 6px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: background 0.2s ease, transform 0.2s ease;
-  z-index: 2;
+  align-items: center;
+  cursor: pointer;
+  z-index: 5;
+  box-shadow: 0 2px 8px rgba(0,0,0,.12);
+  transition: .3s;
 }
 
 .item-heart-icon:hover {
-  background: #ffffff;
   transform: scale(1.1);
 }
 
 .item p {
-  margin: 12px 15px 6px 15px;
+  margin: 15px 15px 8px;
   font-size: 15px;
-  color: #171717;
-  line-height: 1.4;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 500;
+  font-weight: 600;
+  color: #222;
+  line-height: 1.5;
+  min-height: 45px;
 }
 
 .item-prices {
   display: flex;
-  gap: 15px;
-  margin: 0 15px 15px 15px;
-  font-size: 15px;
-  font-weight: 600;
   align-items: center;
+  gap: 12px;
+  margin: 0 15px 15px;
 }
 
 .item-price-new {
   color: #ff4141;
+  font-size: 17px;
+  font-weight: 700;
 }
 
 .item-price-old {
-  color: #8c8c8c;
+  color: #888;
+  font-size: 14px;
   text-decoration: line-through;
-  font-size: 13px;
-  font-weight: 400;
 }
 
-/* --- RESPONSIVE MEDIA QUERIES FOR ITEMS --- */
-@media (max-width: 1024px) {
-  .item-img-container img {
-    height: 200px;
-  }
-  .item p {
-    font-size: 14px;
-    margin: 10px 12px 4px 12px;
-  }
-  .item-prices {
-    margin: 0 12px 12px 12px;
-    font-size: 14px;
-  }
+/* ---------- Laptop ---------- */
+
+@media (max-width:1024px){
+
+.item-img-container{
+    height:290px;
 }
 
-@media (max-width: 768px) {
-  .item-img-container img {
-    height: 180px;
-  }
-  .item p {
-    font-size: 13px;
-    margin: 8px 10px 4px 10px;
-  }
-  .item-prices {
-    margin: 0 10px 10px 10px;
-    font-size: 13px;
-    gap: 10px;
-  }
+.item p{
+    font-size:14px;
 }
 
-@media (max-width: 480px) {
-  .item-img-container img {
-    height: 160px;
-  }
-  .item p {
-    font-size: 12px;
-    margin: 6px 8px 2px 8px;
-  }
-  .item-prices {
-    margin: 0 8px 8px 8px;
-    font-size: 12px;
-  }
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width:768px){
+
+.item{
+    max-width:340px;
+    margin:auto;
+}
+
+.item-img-container{
+    height:300px;
+}
+
+.item p{
+    font-size:14px;
+}
+
+.item-price-new{
+    font-size:16px;
+}
+
+.item-price-old{
+    font-size:13px;
+}
+
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width:480px){
+
+.item{
+    max-width:340px;
+    margin:auto;
+    border-radius:14px;
+}
+
+.item-img-container{
+    height:320px;
+}
+
+.item-img-container img{
+    padding:20px;
+}
+
+.item p{
+    font-size:15px;
+    margin:15px;
+}
+
+.item-prices{
+    margin:0 15px 15px;
+}
+
+.item-price-new{
+    font-size:17px;
+}
+
+.item-price-old{
+    font-size:14px;
+}
+
 }
