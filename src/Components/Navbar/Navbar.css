@@ -1,204 +1,252 @@
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+.navbar {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.navbar{
-width:100%;
-height:80px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:0 70px;
-background:#fff;
-box-shadow:0 2px 12px rgba(0,0,0,.08);
-position:sticky;
-top:0;
-z-index:999;
+/* Top Row Styling */
+.nav-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.nav-logo{
-display:flex;
-align-items:center;
-gap:10px;
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.nav-logo img{
-width:55px;
+.nav-logo img {
+  width: 38px;
 }
 
-.nav-logo p{
-font-size:30px;
-font-weight:700;
-color:#111;
-letter-spacing:1px;
+.nav-logo p {
+  color: #111827;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  margin: 0;
 }
 
-.nav-menu{
-display:flex;
-align-items:center;
-gap:40px;
-list-style:none;
+/* Search Bar in Center of Top Row */
+.nav-search-box {
+  display: flex;
+  align-items: center;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 30px;
+  padding: 8px 20px;
+  width: 400px;
+  box-sizing: border-box;
 }
 
-.nav-menu li{
-display:flex;
-flex-direction:column;
-align-items:center;
-font-size:18px;
-font-weight:500;
-cursor:pointer;
+.nav-search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  color: #374151;
 }
 
-.nav-menu li a{
-text-decoration:none;
-color:#333;
-transition:.3s;
+.search-icon {
+  font-size: 14px;
+  color: #9ca3af;
+  cursor: pointer;
 }
 
-.nav-menu li a:hover{
-color:#ff4141;
+/* Right Section */
+.nav-login-cart {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  position: relative;
 }
 
-.nav-menu hr{
-width:80%;
-height:3px;
-border:none;
-border-radius:20px;
-background:#ff4141;
-margin-top:5px;
+.nav-wishlist-link {
+  display: flex;
+  align-items: center;
+  position: relative;
+  top: -1px;
 }
 
-.nav-login-cart{
-display:flex;
-align-items:center;
-gap:25px;
+.nav-wishlist-icon {
+  font-size: 22px;
+  cursor: pointer;
+  color: #374151;
+  display: flex;
+  align-items: center;
 }
 
-.nav-login-cart button{
-width:120px;
-height:42px;
-border-radius:30px;
-border:1px solid #999;
-background:#fff;
-font-size:17px;
-cursor:pointer;
-transition:.3s;
+.nav-cart-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-.nav-login-cart button:hover{
-background:#111;
-color:#fff;
+.nav-cart-count {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  border-radius: 50%;
+  font-size: 10px;
+  background: #dc2626;
+  color: white;
+  font-weight: 700;
 }
 
-.nav-icon-container{
-position:relative;
-display:flex;
-align-items:center;
-justify-content:center;
+.login-register-btn {
+  padding: 8px 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 20px;
+  color: #111827;
+  font-size: 12px;
+  font-weight: 700;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.nav-icon-container img{
-width:30px;
-cursor:pointer;
+.login-register-btn:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
 }
 
-.nav-cart-count{
-position:absolute;
-top:-8px;
-right:-10px;
-width:20px;
-height:20px;
-background:#ff4141;
-border-radius:50%;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:11px;
-font-weight:600;
-color:#fff;
+/* Bottom Row Styling (Menu Links Centered) */
+.nav-bottom-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #f3f4f6;
+  padding: 10px 0;
+  background: #ffffff;
 }
 
-.nav-dropdown{
-display:none;
-width:35px;
-cursor:pointer;
-transition:.4s;
+.nav-menu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 40px;
+  color: #374151;
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
 }
 
-.nav-dropdown.open{
-transform:rotate(180deg);
+.nav-menu li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
 }
 
-@media (max-width:768px){
-
-.navbar{
-    display:grid;
-    grid-template-columns:auto 1fr auto auto;
-    align-items:center;
-    padding:12px 16px;
-    height:70px;
+.nav-menu hr {
+  border: none;
+  width: 100%;
+  height: 3px;
+  background: #dc2626;
+  border-radius: 10px;
+  margin: 0;
 }
 
-.nav-logo{
-    gap:8px;
-}
+/* ===========================
+   Mobile Responsive
+=========================== */
 
-.nav-logo img{
-    width:42px;
-}
+@media (max-width: 768px) {
+  .navbar {
+    width: 100%;
+    overflow: hidden;
+  }
 
-.nav-logo p{
-    font-size:20px;
-}
+  .nav-top-row {
+    padding: 10px 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: space-between;
+  }
 
-.nav-dropdown{
-    display:block;
-    width:28px;
-    justify-self:end;
-}
+  .nav-logo img {
+    width: 28px;
+  }
 
-.nav-menu{
-    display:none;
-    position:absolute;
-    top:70px;
-    left:0;
-    width:100%;
-    background:#fff;
-    flex-direction:column;
-    padding:20px 0;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
-}
+  .nav-logo p {
+    font-size: 16px;
+  }
 
-.nav-menu-visible{
-    display:flex;
-}
+  .nav-search-box {
+    order: 3;
+    width: 100%;
+    margin-top: 2px;
+    padding: 6px 15px;
+  }
 
-.nav-menu li{
-    padding:12px 0;
-}
+  .nav-search-box input {
+    font-size: 13px;
+  }
 
-.nav-login-cart{
-    width:auto;
-    margin:0;
-    gap:14px;
-}
+  .nav-login-cart {
+    gap: 10px;
+  }
 
-.nav-login-cart button{
-    display:none; /* Mobile par Login hide */
-}
+  .nav-wishlist-icon {
+    font-size: 18px;
+  }
 
-.nav-icon-container img{
-    width:24px;
-}
+  /* Yahan cart icon ko apni marzi ki position par thoda sa neechay adjust kar diya hai */
+  .nav-cart-icon-container {
+    position: relative;
+    top: 4px;
+  }
 
-.nav-cart-count{
-    width:18px;
-    height:18px;
-    font-size:10px;
-    top:-6px;
-    right:-6px;
-}
+  .login-register-btn {
+    display: block;
+    padding: 4px 8px;
+    font-size: 9px;
+    border-radius: 12px;
+  }
 
+  .nav-bottom-row {
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 8px 12px;
+  }
+.login-register-btn {
+  padding: 8px 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 20px;
+  color: #000000; /* Text color black kar diya gaya hai */
+  font-size: 12px;
+  font-weight: 700;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+  .nav-bottom-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-menu {
+    gap: 15px;
+    white-space: nowrap;
+    font-size: 13px;
+  }
 }

@@ -11,6 +11,7 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.03);
     transition: transform 0.3s ease;
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .item:hover {
@@ -28,6 +29,7 @@
     justify-content: center;
     overflow: hidden;
 }
+
 /* Mix-blend-mode ki madad se images red GAP shirt jesi ho jayengi */
 .item-img-container img {
     width: 100%;
@@ -35,6 +37,7 @@
     object-fit: contain; /* Shirt katey gi nahi */
     mix-blend-mode: multiply; /* Yeh magic trick image ke extra background ko chupa de gi */
 }
+
 .item p {
     font-size: 14px;
     font-weight: 500;
@@ -67,28 +70,32 @@
     text-decoration: line-through;
 }
 
-
-
-
-/* Mobile Friendly Responsive Design */
 @media(max-width: 768px) {
     .item {
-        max-width: 100%;
-        padding: 12px;
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 6px !important;
     }
 
     .item-img-container {
-        height: 220px;
+        height: 110px !important;
     }
 
     .item p {
-        font-size: 13px;
-        height: 38px;
+        font-size: 10px !important;
+        height: 28px !important;
     }
-}
 
-@media(max-width: 480px) {
-    .item-img-container {
-        height: 190px;
+    .item-prices {
+        gap: 5px !important;
+    }
+
+    .item-price-new {
+        font-size: 11px !important;
+    }
+
+    .item-price-old {
+        font-size: 10px !important;
     }
 }

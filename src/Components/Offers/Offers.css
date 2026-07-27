@@ -1,14 +1,14 @@
 .offers {
   width: 85%;
   height: 60vh;
-  max-width: 1200px;
-  background: linear-gradient(180deg, #fde1ff 0%, #e1ffea22 60%);
   margin: auto;
-  padding: 0px 140px;
+  /* Yeh raha naya grey gradient background */
+  background: linear-gradient(180deg, #f3f4f6 0%, #e5e7eb 100%);
   display: flex;
-  border-radius: 20px;
+  /* baaki saari properties waisi hi rahengi */
+  border-radius: 12px;
+  padding: 0px 140px;
   justify-content: space-between;
-  margin-bottom: 120px;
   box-sizing: border-box;
 }
 

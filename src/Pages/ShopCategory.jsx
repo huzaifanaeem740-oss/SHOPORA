@@ -1,127 +1,84 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import './CSS/ShopCategory.css';
 import { ShopContext } from '../Context/ShopContext';
 import Item from '../Components/Item/Item';
 
-import banner_mens from '../Components/Assets/banner_mens.png';
-import banner_women from '../Components/Assets/banner_womens.png';
-import banner_kids from '../Components/Assets/banner_kids.png';
-
 const ShopCategory = (props) => {
-
   const { all_product } = useContext(ShopContext);
-
-  let currentBanner = banner_mens;
-  let sectionTypes = [];
-
-  if (props.category === "men") {
-    currentBanner = banner_mens;
-    sectionTypes = [
-      { key: "shirt", title: "Shirts & Jerseys" },
-      { key: "pant", title: "Pants & Trousers" },
-      { key: "footwear", title: "Footwear & Shoes" },
-      { key: "slippers", title: "Slippers & Slides" },
-      { key: "watch", title: "Watches" },
-      { key: "belts", title: "Belts" },
-      { key: "fragrances", title: "Fragrances & Perfumes" },
-      { key: "cap", title: "Caps" }
-    ];
-  }
-
-  else if (props.category === "women") {
-    currentBanner = banner_women;
-    sectionTypes = [
-      { key: "shirt", title: "Shirts & Tops" },
-      { key: "pant", title: "Pants & Trousers" },
-      { key: "footwear", title: "Footwear & Sneakers" },
-      { key: "slippers", title: "Slippers & Sandals" },
-      { key: "watch", title: "Watches" },
-      { key: "belt", title: "Belts" },
-      { key: "perfume", title: "Perfumes" },
-      { key: "cap", title: "Caps" }
-    ];
-  }
-
-  else if (props.category === "kids") {
-    currentBanner = banner_kids;
-    sectionTypes = [
-      { key: "shirt", title: "T-Shirts & Shirts" },
-      { key: "pant", title: "Shorts & Pants" },
-      { key: "footwear", title: "Footwear" },
-      { key: "slippers", title: "Slippers & Slides" },
-      { key: "watch", title: "Watches" },
-      { key: "belts", title: "Belts" },
-      { key: "fragrances", title: "Perfumes" },
-      { key: "cap", title: "Caps" }
-    ];
-  }
+  
+  // Selected sub-type state ('all' by default)
+  const [selectedType, setSelectedType] = useState('all');
 
   return (
-    <div className="shop-category">
-
-      <img
-        className="shopcategory-banner"
-        src={currentBanner}
-        alt=""
-      />
-
-      <div className="shopcategory-sections">
-
-        {sectionTypes.map((section, index) => {
-
-          const categoryProducts = all_product.filter(
-            item =>
-              item.category === props.category &&
-              item.type === section.key
-          );
-
-          if (categoryProducts.length === 0) return null;
-
-          return (
-
-            <div className="category-section" key={index}>
-
-              <div className="category-title">
-
-                <div className="line"></div>
-
-                <h2>{section.title}</h2>
-
-                <div className="line"></div>
-
-              </div>
-
-              <div className="shopcategory-products">
-
-                {categoryProducts.map((item) => (
-
-                  <Item
-                    key={item.id}
-                    id={item.id}
-                    name={item.name}
-                    image={item.image}
-                    new_price={item.new_price}
-                    old_price={item.old_price}
-                  />
-
-                ))}
-
-              </div>
-
-            </div>
-
-          );
-
-        })}
-
+    <div className='shop-category-page' style={{ width: '100%', minHeight: '100vh', paddingBottom: '50px' }}>
+      
+      {/* Category / Type Filter Bar */}
+      <div className="category-filter-bar" style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', margin: '30px auto', width: '90%', maxWidth: '1400px' }}>
+        <button onClick={() => setSelectedType('all')} style={btnStyle(selectedType === 'all')}>All</button>
+        <button onClick={() => setSelectedType('shirt')} style={btnStyle(selectedType === 'shirt')}>Shirts / Tops</button>
+        <button onClick={() => setSelectedType('pant')} style={btnStyle(selectedType === 'pant')}>Pants / Shorts</button>
+        
+        {/* Dynamic / Multi-type Support for Footwear & Slippers */}
+        <button onClick={() => setSelectedType('footwear')} style={btnStyle(selectedType === 'footwear' || selectedType === 'shoe')}>Footwear / Shoes</button>
+        <button onClick={() => setSelectedType('slippers')} style={btnStyle(selectedType === 'slippers' || selectedType === 'slipper')}>Slippers / Sandals</button>
+        
+        <button onClick={() => setSelectedType('watch')} style={btnStyle(selectedType === 'watch')}>Watches</button>
+        
+        {/* Handles both 'perfumes' and 'perfume' */}
+        <button onClick={() => setSelectedType('perfume')} style={btnStyle(selectedType === 'perfume' || selectedType === 'perfumes')}>Perfumes</button>
+        
+        {/* Handles both 'belts' and 'belt' */}
+        <button onClick={() => setSelectedType('belts')} style={btnStyle(selectedType === 'belts' || selectedType === 'belt')}>Belts</button>
+        
+        <button onClick={() => setSelectedType('cap')} style={btnStyle(selectedType === 'cap')}>Caps / Hats</button>
       </div>
 
-      <div className="shopcategory-loadmore">
-        Explore More
+      {/* Products Grid */}
+      <div className='shop-category' style={{ width: '85%', margin: '20px auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '30px', maxWidth: '1400px' }}>
+        {all_product.map((item, i) => {
+          const matchesCategory = props.category === item.category;
+          
+          // Flexible type matching across different spellings used in data
+          const matchesType = 
+            selectedType === 'all' || 
+            item.type === selectedType ||
+            (selectedType === 'footwear' && (item.type === 'footwear' || item.type === 'shoe')) ||
+            (selectedType === 'slippers' && (item.type === 'slippers' || item.type === 'slipper')) ||
+            (selectedType === 'perfume' && (item.type === 'perfume' || item.type === 'perfumes')) ||
+            (selectedType === 'belts' && (item.type === 'belts' || item.type === 'belt'));
+
+          if (matchesCategory && matchesType) {
+            return (
+              <Item 
+                key={i} 
+                id={item.id} 
+                name={item.name} 
+                image={item.image} 
+                new_price={item.new_price} 
+                old_price={item.old_price} 
+              />
+            );
+          } else {
+            return null;
+          }
+        })}
       </div>
 
     </div>
   );
 };
+
+// Helper style for filter buttons
+const btnStyle = (isActive) => ({
+  padding: '10px 18px',
+  background: isActive ? '#ea580c' : '#0f172a',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '25px',
+  cursor: 'pointer',
+  fontSize: '13px',
+  fontWeight: '600',
+  transition: '0.3s'
+});
 
 export default ShopCategory;

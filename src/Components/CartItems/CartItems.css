@@ -1,119 +1,115 @@
-.cartitems {
-    margin: 30px 20px;
+.cartitems{
+    width:100%;
+    max-width:1200px;
+    margin:30px auto;
+    padding:0 15px;
+    box-sizing:border-box;
+    overflow:hidden;
 }
 
-.cartitems hr {
-    height: 2px;
-    background: #e2e2e2;
-    border: 0;
+.cartitems *{
+    box-sizing:border-box;
+    max-width:100%;
 }
 
-.cartitems-format-main {
-    display: grid;
-    grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;
-    align-items: center;
-    gap: 20px;
-    padding: 15px 0px;
-    color: #454545;
-    font-size: 16px;
-    font-weight: 600;
+.cartitems hr{
+    border:none;
+    height:1px;
+    background:#e5e5e5;
+    margin:10px 0;
 }
 
-.cartitems-format {
-    font-size: 15px;
-    font-weight: 500;
+.cartitems-format-main{
+    display:grid;
+    grid-template-columns:70px 2fr 1fr 1fr 1fr 50px;
+    align-items:center;
+    gap:15px;
+    font-size:16px;
+    font-weight:600;
+    padding:15px 0;
 }
 
-.carticon-product-icon {
-    height: 50px;
-    width: 50px;
-    object-fit: contain;
+.cartitems-format{
+    display:grid;
+    grid-template-columns:70px 2fr 1fr 1fr 1fr 50px;
+    align-items:center;
+    gap:15px;
+    padding:15px 0;
 }
 
-.cartitems-quantity {
-    width: 45px;
-    height: 35px;
-    border: 2px solid #ebebeb;
-    background: #fff;
-    text-align: center;
-    font-size: 15px;
+.carticon-product-icon{
+    width:60px;
+    height:60px;
+    object-fit:cover;
+    border-radius:6px;
 }
 
-.cartitems-remove-icon {
-    width: 15px;
-    cursor: pointer;
+.cartitems-quantity{
+    width:45px;
+    height:35px;
 }
 
-.cartitems-down {
-    display: flex;
-    margin: 50px 0px;
-    flex-direction: column;
-    gap: 40px;
+.cartitems-remove-icon{
+    width:18px;
+    cursor:pointer;
 }
 
-.cartitems-total {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.cartitems-down{
+    display:flex;
+    justify-content:space-between;
+    gap:30px;
+    margin-top:30px;
+    flex-wrap:wrap;
 }
 
-.cartitems-total-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 0px;
+.cartitems-total,
+.cartitems-promocode{
+    flex:1;
+    min-width:300px;
 }
 
-.cartitems-total button {
-    width: 100%;
-    max-width: 262px;
-    height: 50px;
-    border: none;
-    background: #ff4141;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
+.cartitems-promobox{
+    display:flex;
+    width:100%;
 }
 
-.cartitems-promobox {
-    width: 100%;
-    max-width: 504px;
-    height: 50px;
-    background: #eaeaea;
-    display: flex;
-    margin-top: 10px;
+.cartitems-promobox input{
+    flex:1;
+    min-width:0;
 }
 
-.cartitems-promobox input {
-    border: none;
-    outline: none;
-    background: transparent;
-    padding-left: 15px;
-    font-size: 15px;
-    flex: 1;
+.cartitems-promobox button{
+    width:120px;
 }
 
-.cartitems-promobox button {
-    width: 130px;
-    height: 50px;
-    background: #000;
-    color: #fff;
-    font-size: 15px;
-    cursor: pointer;
-    border: none;
+@media (max-width:768px){
+
+.cartitems{
+    padding:0 10px;
+    margin:20px auto;
 }
 
-/* Mobile Responsive Adjustments */
-@media(max-width: 768px) {
-    .cartitems-format-main {
-        grid-template-columns: 1fr 2fr 1fr 1fr;
-        font-size: 12px;
-        gap: 10px;
-    }
-    /* Mobile view mein Price aur Total column ko hide kar sakte hain agar jagah kam ho, ya compact rakhein */
-    .carticon-product-icon {
-        height: 40px;
-        width: 40px;
-    }
+.cartitems-format-main{
+    display:none;
+}
+
+.cartitems-format{
+    grid-template-columns:70px 1fr auto;
+    gap:10px;
+}
+
+.cartitems-down{
+    flex-direction:column;
+}
+
+.cartitems-total,
+.cartitems-promocode{
+    min-width:100%;
+}
+
+.cartitems-total button,
+.cartitems-promobox button{
+    width:100%;
+}
+
 }

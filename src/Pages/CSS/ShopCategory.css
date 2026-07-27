@@ -2,13 +2,17 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    overflow-x: hidden;
     margin-bottom: 100px;
+    box-sizing: border-box;
 }
 
 .shopcategory-banner {
     display: block;
     margin: 30px auto;
     width: 82%;
+    max-width: 1200px;
     border-radius: 10px;
 }
 
@@ -17,12 +21,16 @@
     flex-direction: column;
     gap: 40px;
     width: 82%;
+    max-width: 1200px;
+    box-sizing: border-box;
 }
 
 .category-section {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .category-title {
@@ -52,6 +60,8 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 30px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .shopcategory-loadmore {
@@ -75,52 +85,43 @@
 }
 
 /* ==========================================
-   Responsive Design for Mobile Screens
+   Responsive Design for Tablets & Mobiles
    ========================================== */
-@media(max-width: 1200px) {
-  .shopcategory-banner,
-  .shopcategory-sections {
-    width: 90%;
-  }
-  .shopcategory-products {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-}
-
-@media(max-width: 900px) {
-  .shopcategory-products {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media(max-width: 768px) {
+  .shop-category {
+    padding: 0 5px;
+    box-sizing: border-box;
+  }
+
   .shopcategory-banner {
-    width: 95%;
+    width: 100%;
     margin: 15px auto;
   }
   
   .shopcategory-sections {
-    width: 95%;
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
   }
 
-  /* Mobile par sirf 1 column */
+  /* Aik row mein 3 products set karne ke liye */
   .shopcategory-products {
     display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 20px !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
     width: 100% !important;
     margin: 0 auto !important;
+    box-sizing: border-box !important;
   }
 
   .category-title h2 {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .shopcategory-loadmore {
     width: 150px;
     height: 50px;
     font-size: 14px;
-    margin: 80px auto 0px auto;
+    margin: 60px auto 0px auto;
   }
 }

@@ -1,0 +1,281 @@
+.about-us-container {
+  width: 100%;
+  padding: 60px 8%;
+  background-color: #f9fafb;
+  color: #111827;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Header */
+.about-header {
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.about-header h1 {
+  font-size: 48px;
+  font-weight: 900;
+  color: #1f2937;
+  margin-bottom: 15px;
+}
+
+.about-header p {
+  font-size: 18px;
+  color: #6b7280;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 15px;
+  box-sizing: border-box;
+}
+
+/* Main Story */
+.about-story {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 60px;
+  margin-bottom: 90px;
+}
+
+.about-story-left {
+  flex: 1.2;
+}
+
+.about-story-left h2 {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 25px;
+}
+
+.about-story-left p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #4b5563;
+  margin-bottom: 20px;
+}
+
+.about-story-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.about-story-right img {
+  width: 90%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* Vision/Mission */
+.about-vision-mission {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 90px;
+}
+
+.vision-card {
+  flex: 1;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.vision-card h3 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ea580c; /* Brand Accent */
+  margin-bottom: 20px;
+}
+
+.vision-card p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #374151;
+}
+
+/* Values/Promises */
+.about-values {
+  margin-bottom: 90px;
+  text-align: center;
+}
+
+.about-values h2 {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 50px;
+}
+
+.values-grid {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.value-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+  box-sizing: border-box;
+}
+
+.value-item img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 20px;
+}
+
+.value-item h4 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.value-item p {
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+/* Join Us */
+.about-join-us {
+  text-align: center;
+  background: #111827;
+  color: #ffffff;
+  padding: 60px 40px;
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+
+.about-join-us h2 {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 25px;
+}
+
+.about-join-us p {
+  font-size: 16px;
+  color: #d1d5db;
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 0 auto 30px auto;
+}
+
+.about-socials {
+  margin-bottom: 40px;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.about-socials span {
+  color: #9ca3af;
+  margin-right: 10px;
+}
+
+.about-socials a {
+  color: #ffffff;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.about-socials a:hover {
+  text-decoration: underline;
+}
+
+.shop-now-btn {
+  background: #ea580c;
+  color: #ffffff;
+  padding: 16px 40px;
+  border-radius: 40px;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.shop-now-btn:hover {
+  background: #c2410c;
+}
+
+/* --- Responsive Media Queries --- */
+
+@media (max-width: 992px) {
+  .about-story, 
+  .about-vision-mission, 
+  .values-grid {
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .about-story {
+    gap: 40px;
+  }
+
+  .about-story-right img {
+    max-width: 320px;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-us-container {
+    padding: 40px 5%;
+  }
+
+  .about-header h1 {
+    font-size: 36px;
+  }
+
+  .about-header p {
+    font-size: 16px;
+  }
+
+  .about-story-left h2,
+  .about-vision-mission h3,
+  .about-values h2,
+  .about-join-us h2 {
+    font-size: 28px;
+  }
+
+  .vision-card, 
+  .value-item {
+    padding: 30px 20px;
+  }
+
+  .about-join-us {
+    padding: 40px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-header h1 {
+    font-size: 30px;
+  }
+
+  .about-story-left h2,
+  .about-values h2,
+  .about-join-us h2 {
+    font-size: 24px;
+  }
+
+  .shop-now-btn {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+}
