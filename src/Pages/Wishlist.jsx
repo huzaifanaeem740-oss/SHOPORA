@@ -3,41 +3,64 @@ import './CSS/Wishlist.css';
 import { ShopContext } from '../Context/ShopContext';
 
 const Wishlist = () => {
-  const { all_product, wishlistItems, removeFromWishlist } = useContext(ShopContext);
+  const { wishlistItems, all_product, removeFromWishlist, addToCart } = useContext(ShopContext);
+
+  const wishlistProducts = all_product.filter((product) => 
+    wishlistItems.includes(product.id) || wishlistItems.includes(String(product.id))
+  );
 
   return (
-    <div className='wishlist-container'>
-      <h1>My Wishlist</h1>
+    <div className="wishlist-container">
       
-      <div className="wishlist-grid">
-        {all_product.map((e) => {
-          if (wishlistItems[e.id] > 0) {
+      {/* Marquee Patti */}
+     
+
+      <div className="wishlist-header">
+        <h1>Favorites ({wishlistProducts.length})</h1>
+      </div>
+
+      {wishlistProducts.length > 0 ? (
+        <div className="wishlist-grid">
+          {wishlistProducts.map((product) => {
             return (
-              <div className="wishlist-item-card" key={e.id}>
-                <div className="wishlist-img-box">
-                  <img src={e.image} alt="Product" />
+              <div key={product.id} className="wishlist-item-card">
+                <div className="wishlist-img-container">
+                  <img src={product.image} alt={product.name} />
+                  <button 
+                    className="remove-wishlist-btn" 
+                    onClick={() => removeFromWishlist(product.id)}
+                    title="Remove from favorites"
+                  >
+                    &times;
+                  </button>
                 </div>
                 
-                <div className="wishlist-item-details">
-                  <h3>{e.name}</h3>
-                  <div className="wishlist-prices">
-                    <span className="wishlist-new-price">PKR {e.new_price}</span>
-                    <span className="wishlist-old-price">PKR {e.old_price}</span>
-                  </div>
+                <div className="wishlist-item-info">
+                  <h3>{product.name}</h3>
+                  <p className="wishlist-category">{product.category || 'Shoes / Clothing'}</p>
+                  <p className="wishlist-price">
+                    PKR {product.new_price || product.price}
+                  </p>
+                  
+                  <button 
+                    className="wishlist-add-to-cart-btn"
+                    onClick={() => {
+                      addToCart(product.id);
+                      removeFromWishlist(product.id);
+                    }}
+                  >
+                    Add to Cart
+                  </button>
                 </div>
-
-                <button 
-                  className="wishlist-remove-btn" 
-                  onClick={() => removeFromWishlist(e.id)}
-                >
-                  Remove from Wishlist
-                </button>
               </div>
             );
-          }
-          return null;
-        })}
-      </div>
+          })}
+        </div>
+      ) : (
+        <div className="empty-wishlist-page">
+          <p>There are no saved items in your favorites.</p>
+        </div>
+      )}
     </div>
   );
 };

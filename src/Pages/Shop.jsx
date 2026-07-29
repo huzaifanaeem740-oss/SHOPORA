@@ -11,10 +11,9 @@ import banner_kids from '../Components/Assets/banner_kids.png';
 const Shop = () => {
   const { all_product } = useContext(ShopContext);
   
-  // Default category 'men'
   const [selectedCategory, setSelectedCategory] = useState('men');
+  const [activeSubFilter, setActiveSubFilter] = useState('all');
 
-  // Banner selection logic
   const getBanner = () => {
     if (selectedCategory === 'men') return banner_mens;
     if (selectedCategory === 'women') return banner_womens;
@@ -22,26 +21,29 @@ const Shop = () => {
     return banner_mens;
   };
 
-  // Helper function to render product sections safely and cleanly
-  const renderSection = (title, allowedKeywords, isBlackBar = false) => {
-    const filteredProducts = all_product.filter(item => {
-      // Category check
-      if (item.category !== selectedCategory) return false;
+  const handleMainCategory = (category) => {
+    setSelectedCategory(category);
+    setActiveSubFilter('all');
+  };
 
-      // If it's just a black bar separator with no items
+  const renderSection = (title, allowedKeywords, sectionKey, isBlackBar = false) => {
+    if (activeSubFilter !== 'all' && activeSubFilter !== sectionKey) {
+      return null;
+    }
+
+    const filteredProducts = all_product.filter(item => {
+      if (item.category !== selectedCategory) return false;
       if (isBlackBar) return false;
 
       const itemName = (item.name || '').toLowerCase();
       const itemType = (item.type || '').toLowerCase();
 
-      // Ensure shoes/watches don't enter clothing sections
-      if (allowedKeywords.includes('shirt') || allowedKeywords.includes('top') || allowedKeywords.includes('jersey')) {
+      if (allowedKeywords.includes('shirt') || allowedKeywords.includes('top') || allowedKeywords.includes('jersey') || allowedKeywords.includes('t-shirt')) {
         if (itemName.includes('watch') || itemName.includes('shoe') || itemName.includes('sneaker') || itemName.includes('belt') || itemName.includes('cap') || itemName.includes('perfume')) {
           return false;
         }
       }
 
-      // Check if item matches any of the allowed keywords in name or type
       return allowedKeywords.some(keyword => 
         itemName.includes(keyword) || itemType.includes(keyword)
       );
@@ -50,8 +52,7 @@ const Shop = () => {
     if (filteredProducts.length === 0 && !isBlackBar) return null;
 
     return (
-      <div key={title} style={{ width: '85%', maxWidth: '1400px', margin: '30px auto' }}>
-        {/* Section Heading or Black Patti */}
+      <div key={title} id={sectionKey} className="shop-section-container" style={{ width: '85%', maxWidth: '1400px', margin: '30px auto' }}>
         {isBlackBar ? (
           <div style={{ background: '#0f172a', color: '#fff', padding: '14px 20px', borderRadius: '8px', marginBottom: '20px', textAlign: 'center', boxShadow: '0 4px 6px -1px rgb(0 0 / 0.1)' }}>
             <h3 style={{ margin: 0, fontSize: '20px', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '700' }}>{title}</h3>
@@ -62,9 +63,8 @@ const Shop = () => {
           </div>
         )}
 
-        {/* Products Grid */}
         {filteredProducts.length > 0 && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '30px' }}>
+          <div className="shop-products-grid">
             {filteredProducts.map((item, i) => (
               <Item 
                 key={i} 
@@ -82,7 +82,7 @@ const Shop = () => {
   };
 
   return (
-    <div className='shop-page' style={{ width: '100%', minHeight: '100vh', background: '#ffffff', paddingBottom: '50px' }}>
+    <div className='shop-page' style={{ width: '100%', minHeight: '100vh', background: '#ffffff', paddingBottom: '50px', overflowX: 'hidden' }}>
       
       <div className="shop-hero" style={{ textAlign: 'center', padding: '20px 0' }}>
         
@@ -95,55 +95,121 @@ const Shop = () => {
           />
         </div>
         
-        {/* Category Switch Buttons */}
+        {/* Main Category Switch Buttons */}
         <div className="main-category-filter" style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '15px', flexWrap: 'wrap' }}>
-          <button onClick={() => setSelectedCategory('men')} style={btnStyle(selectedCategory === 'men')}>Mens</button>
-          <button onClick={() => setSelectedCategory('women')} style={btnStyle(selectedCategory === 'women')}>Womens</button>
-          <button onClick={() => setSelectedCategory('kids')} style={btnStyle(selectedCategory === 'kids')}>Kids</button>
+          <button onClick={() => handleMainCategory('men')} style={btnStyle(selectedCategory === 'men')}>Mens</button>
+          <button onClick={() => handleMainCategory('women')} style={btnStyle(selectedCategory === 'women')}>Womens</button>
+          <button onClick={() => handleMainCategory('kids')} style={btnStyle(selectedCategory === 'kids')}>Kids</button>
         </div>
+
+        {/* Desktop Buttons Filter (Hidden on Mobile via CSS) */}
+        <div className="sub-category-filter desktop-sub-filter" style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '12px', flexWrap: 'wrap' }}>
+          <button onClick={() => setActiveSubFilter('all')} style={subBtnStyle(activeSubFilter === 'all')}>All</button>
+          
+          {selectedCategory !== 'kids' ? (
+            <>
+              <button onClick={() => setActiveSubFilter('shirts')} style={subBtnStyle(activeSubFilter === 'shirts')}>Shirts & Jerseys</button>
+              <button onClick={() => setActiveSubFilter('pants')} style={subBtnStyle(activeSubFilter === 'pants')}>Pants & Trousers</button>
+              <button onClick={() => setActiveSubFilter('shoes')} style={subBtnStyle(activeSubFilter === 'shoes')}>Footwear</button>
+              <button onClick={() => setActiveSubFilter('watches')} style={subBtnStyle(activeSubFilter === 'watches')}>Watches</button>
+              <button onClick={() => setActiveSubFilter('perfumes')} style={subBtnStyle(activeSubFilter === 'perfumes')}>Perfumes</button>
+              <button onClick={() => setActiveSubFilter('belts')} style={subBtnStyle(activeSubFilter === 'belts')}>Belts</button>
+              <button onClick={() => setActiveSubFilter('caps')} style={subBtnStyle(activeSubFilter === 'caps')}>Caps</button>
+            </>
+          ) : (
+            <>
+              <button onClick={() => setActiveSubFilter('shirts')} style={subBtnStyle(activeSubFilter === 'shirts')}>T-Shirts</button>
+              <button onClick={() => setActiveSubFilter('pants')} style={subBtnStyle(activeSubFilter === 'pants')}>Shorts & Pants</button>
+              <button onClick={() => setActiveSubFilter('shoes')} style={subBtnStyle(activeSubFilter === 'shoes')}>Footwear</button>
+              <button onClick={() => setActiveSubFilter('watches')} style={subBtnStyle(activeSubFilter === 'watches')}>Watches</button>
+              <button onClick={() => setActiveSubFilter('perfumes')} style={subBtnStyle(activeSubFilter === 'perfumes')}>Perfumes</button>
+              <button onClick={() => setActiveSubFilter('caps')} style={subBtnStyle(activeSubFilter === 'caps')}>Caps</button>
+            </>
+          )}
+        </div>
+
+        {/* Mobile Dropdown Filter (Visible only on Mobile via CSS) */}
+        <div className="mobile-dropdown-filter">
+          <select 
+            value={activeSubFilter} 
+            onChange={(e) => setActiveSubFilter(e.target.value)}
+            style={{
+              width: '85%',
+              maxWidth: '300px',
+              padding: '10px 15px',
+              borderRadius: '20px',
+              border: '1px solid #cbd5e1',
+              background: '#f8fafc',
+              fontSize: '14px',
+              fontWeight: '500',
+              color: '#1e293b',
+              outline: 'none',
+              marginTop: '12px',
+              boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
+            }}
+          >
+            <option value="all">All Categories</option>
+            {selectedCategory !== 'kids' ? (
+              <>
+                <option value="shirts">Shirts & Jerseys</option>
+                <option value="pants">Pants & Trousers</option>
+                <option value="shoes">Footwear</option>
+                <option value="watches">Watches</option>
+                <option value="perfumes">Perfumes</option>
+                <option value="belts">Belts</option>
+                <option value="caps">Caps</option>
+              </>
+            ) : (
+              <>
+                <option value="shirts">T-Shirts</option>
+                <option value="pants">Shorts & Pants</option>
+                <option value="shoes">Footwear</option>
+                <option value="watches">Watches</option>
+                <option value="perfumes">Perfumes</option>
+                <option value="caps">Caps</option>
+              </>
+            )}
+          </select>
+        </div>
+
       </div>
 
-      {/* Dynamic Sections Based on Selected Category */}
+      {/* Render Sections */}
       {selectedCategory === 'men' && (
         <>
-          {renderSection("Shirts & Jersey's", ['shirt', 't-shirt', 'jersey', 'tee'])}
-          {renderSection("Pants & Trousers", ['pant', 'trouser', 'short', 'jean'])}
-          {renderSection("Shoes & Slippers", ['shoe', 'slipper', 'footwear', 'sneaker', 'sandal'])}
-          
-          {/* Accessories Section */}
-          {renderSection("ACCESSORIES", [], true)}
-          {renderSection("Watches", ['watch'])}
-          {renderSection("Perfumes", ['perfume', 'fragrance'])}
-          {renderSection("Belts", ['belt'])}
-          {renderSection("Caps", ['cap', 'hat'])}
+          {renderSection("Shirts & Jersey's", ['shirt', 't-shirt', 'jersey', 'tee'], 'shirts')}
+          {renderSection("Pants & Trousers", ['pant', 'trouser', 'short', 'jean'], 'pants')}
+          {renderSection("Shoes & Slippers", ['shoe', 'slipper', 'footwear', 'sneaker', 'sandal'], 'shoes')}
+          {renderSection("ACCESSORIES", [], 'acc', true)}
+          {renderSection("Watches", ['watch'], 'watches')}
+          {renderSection("Perfumes", ['perfume', 'fragrance'], 'perfumes')}
+          {renderSection("Belts", ['belt'], 'belts')}
+          {renderSection("Caps", ['cap', 'hat'], 'caps')}
         </>
       )}
 
       {selectedCategory === 'women' && (
         <>
-          {renderSection("T-Shirts & Tops", ['shirt', 'top', 'tee', 'jersey'])}
-          {renderSection("Shorts & Pants", ['pant', 'short', 'trouser', 'jean'])}
-          {renderSection("Footwear", ['shoe', 'slipper', 'footwear', 'sneaker', 'sandal'])}
-          
-          {/* Accessories Section */}
-          {renderSection("ACCESSORIES", [], true)}
-          {renderSection("Watches", ['watch'])}
-          {renderSection("Perfumes", ['perfume', 'fragrance'])}
-          {renderSection("Caps", ['cap', 'hat'])}
+          {renderSection("Shirts & Jersey's", ['shirt', 'top', 'jersey', 'tee', 't-shirt'], 'shirts')}
+          {renderSection("Pants & Trousers", ['pant', 'short', 'trouser', 'jean'], 'pants')}
+          {renderSection("Shoes & Slippers", ['shoe', 'slipper', 'footwear', 'sneaker', 'sandal'], 'shoes')}
+          {renderSection("ACCESSORIES", [], 'acc', true)}
+          {renderSection("Watches", ['watch'], 'watches')}
+          {renderSection("Perfumes", ['perfume', 'fragrance'], 'perfumes')}
+          {renderSection("Belts", ['belt'], 'belts')}
+          {renderSection("Caps", ['cap', 'hat'], 'caps')}
         </>
       )}
 
       {selectedCategory === 'kids' && (
         <>
-          {renderSection("T-Shirts", ['shirt', 't-shirt', 'tee', 'jersey'])}
-          {renderSection("Shorts & Pants", ['pant', 'short', 'trouser'])}
-          {renderSection("Footwear", ['shoe', 'slipper', 'footwear', 'sneaker'])}
-          
-          {/* Accessories Section */}
-          {renderSection("ACCESSORIES", [], true)}
-          {renderSection("Watches", ['watch'])}
-          {renderSection("Perfumes", ['perfume', 'fragrance'])}
-          {renderSection("Caps", ['cap', 'hat'])}
+          {renderSection("T-Shirts", ['shirt', 't-shirt', 'tee', 'jersey'], 'shirts')}
+          {renderSection("Shorts & Pants", ['pant', 'short', 'trouser'], 'pants')}
+          {renderSection("Footwear", ['shoe', 'slipper', 'footwear', 'sneaker'], 'shoes')}
+          {renderSection("ACCESSORIES", [], 'acc', true)}
+          {renderSection("Watches", ['watch'], 'watches')}
+          {renderSection("Perfumes", ['perfume', 'fragrance'], 'perfumes')}
+          {renderSection("Caps", ['cap', 'hat'], 'caps')}
         </>
       )}
 
@@ -151,16 +217,27 @@ const Shop = () => {
   );
 };
 
-// Button styling
 const btnStyle = (isActive) => ({
   padding: '10px 22px',
-  background: isActive ? '#64748b' : '#0f172a',
+  background: isActive ? '#0ea5e9' : '#0f172a',
   color: '#fff',
   border: 'none',
   borderRadius: '25px',
   cursor: 'pointer',
   fontSize: '14px',
   fontWeight: '600',
+  transition: '0.3s'
+});
+
+const subBtnStyle = (isActive) => ({
+  padding: '6px 16px',
+  background: isActive ? '#334155' : '#e2e8f0',
+  color: isActive ? '#fff' : '#1e293b',
+  border: 'none',
+  borderRadius: '20px',
+  cursor: 'pointer',
+  fontSize: '12px',
+  fontWeight: '500',
   transition: '0.3s'
 });
 

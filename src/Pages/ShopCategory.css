@@ -47,7 +47,6 @@
   cursor: pointer;
 }
 
-/* --- Responsive Design (Mobile View: Strictly 2 Columns) --- */
 @media (max-width: 900px) {
   .shopcategory-products {
     display: grid !important;
@@ -76,14 +75,4 @@
     height: 50px;
     font-size: 15px;
   }
-  @media (max-width: 992px) {
-  div.shopcategory-products {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    padding: 0 10px !important;
-    margin: 10px 0 !important;
-  }
-}
 }

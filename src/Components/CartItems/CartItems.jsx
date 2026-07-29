@@ -1,218 +1,184 @@
-import React, { useContext, useState } from 'react'
-import './CartItems.css'
-import { ShopContext } from '../../Context/ShopContext'
+import React, { useContext, useState } from 'react';
+import './CartItems.css';
+import { ShopContext } from '../../Context/ShopContext';
+import { getStoredOrders, saveStoredOrders } from '../../ProductStore';
 
 const CartItems = () => {
-  const { all_product, cartItems, removeFromCart, getTotalCartAmount } = useContext(ShopContext);
+  const { getTotalCartAmount, all_product, cartItems, removeFromCart } = useContext(ShopContext);
+  
+  const [showModal, setShowModal] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('Cash on Delivery (COD)');
+  const [orderPlaced, setOrderPlaced] = useState(false);
 
-  const [promoCode, setPromoCode] = useState('');
-  const [discount, setDiscount] = useState(0);
-  const [promoMessage, setPromoMessage] = useState('');
-  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
-  const [selectedPayment, setSelectedPayment] = useState('COD (Cash on Delivery)');
-  const [customerDetails, setCustomerDetails] = useState({ name: '', phone: '', address: '' });
-
-  const handleApplyPromo = () => {
-    if (promoCode.trim().toUpperCase() === 'FARAZ') {
-      setDiscount(0.75);
-      setPromoMessage('🎉 75% OFF Applied!');
-    } else {
-      setDiscount(0);
-      setPromoMessage('❌ Invalid Code');
-    }
-  };
-
-  const subtotal = getTotalCartAmount ? getTotalCartAmount() : 0;
-  const finalTotal = Math.round(subtotal * (1 - discount));
-
-  const handleConfirmOrder = (e) => {
+  const handleOrderSubmit = (e) => {
     e.preventDefault();
-    let orderDetailsText = `*New Order Placed - VESTRO X*\n\n`;
-    orderDetailsText += `*Customer Name:* ${customerDetails.name}\n`;
-    orderDetailsText += `*Phone:* ${customerDetails.phone}\n`;
-    orderDetailsText += `*Address:* ${customerDetails.address}\n\n`;
-    orderDetailsText += `*Items Ordered:*\n`;
-
-    all_product.forEach((item) => {
-      let qty = cartItems[item.id] || cartItems[String(item.id)] || cartItems[Number(item.id)] || 0;
-      if (qty > 0) {
-        orderDetailsText += `- ${item.name} (x${qty}) : PKR ${item.new_price * qty}\n`;
-      }
-    });
-
-    orderDetailsText += `\n*Subtotal:* PKR ${subtotal}`;
-    if (discount > 0) {
-      orderDetailsText += `\n*Discount:* 75% OFF`;
+    if (!name || !email || !phone || !address) {
+      alert('Please fill in all the required details!');
+      return;
     }
-    orderDetailsText += `\n*Total Amount:* PKR ${finalTotal}`;
-    orderDetailsText += `\n*Payment Method:* ${selectedPayment}`;
 
-    const encodedMessage = encodeURIComponent(orderDetailsText);
-    const whatsappUrl = `https://wa.me/923282134905?text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank');
+    const newOrder = {
+      id: '#ORD-' + Math.floor(1000 + Math.random() * 9000),
+      customer: name,
+      email: email,
+      phone: phone,
+      address: address,
+      payment: paymentMethod,
+      total: '$' + getTotalCartAmount(),
+      status: 'Pending',
+      date: new Date().toLocaleDateString()
+    };
+
+    const existingOrders = getStoredOrders();
+    saveStoredOrders([...existingOrders, newOrder]);
+
+    setOrderPlaced(true);
   };
 
   return (
-    <div style={{ padding: '10px 8px', background: '#fff', width: '100%', maxWidth: '100%', margin: '0 auto', boxSizing: 'border-box', overflowX: 'hidden' }}>
-      <h2 style={{ marginBottom: '10px', fontWeight: 'bold', fontSize: '18px', paddingLeft: '4px' }}>Shopping Cart</h2>
-      
-      {/* Cart Items List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', boxSizing: 'border-box' }}>
+    <div className='cartitems' style={{ width: '100%', minHeight: '80vh', backgroundColor: '#fafaf9', padding: '40px 20px', fontFamily: 'sans-serif', boxSizing: 'border-box' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', background: '#ffffff', padding: '30px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
+        
+        <div className="cartitems-format-main" style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 1fr 1fr 1fr 1fr', alignItems: 'center', gap: '20px', padding: '20px 0', color: '#1e293b', fontSize: '18px', fontWeight: 'bold', borderBottom: '2px solid #e2e8f0' }}>
+          <p>Products</p>
+          <p>Title</p>
+          <p>Price</p>
+          <p>Quantity</p>
+          <p>Total</p>
+          <p>Remove</p>
+        </div>
+
         {all_product.map((e) => {
-          let qty = cartItems[e.id] || cartItems[String(e.id)] || cartItems[Number(e.id)] || 0;
-          if (qty > 0) {
+          if (cartItems[e.id] > 0) {
             return (
-              <div key={e.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fdfdfd', padding: '8px 10px', borderRadius: '6px', border: '1px solid #e5e7eb', gap: '8px', width: '100%', boxSizing: 'border-box' }}>
-                <img src={e.image} alt="" style={{ width: '45px', height: '45px', objectFit: 'cover', borderRadius: '4px', flexShrink: 0 }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontWeight: '600', fontSize: '12px', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{e.name}</p>
-                  <p style={{ fontSize: '11px', color: '#6b7280', margin: '2px 0 0 0' }}>PKR {e.new_price} × {qty}</p>
-                </div>
-                <div style={{ textAlign: 'right', flexShrink: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <p style={{ fontWeight: 'bold', fontSize: '12px', margin: 0 }}>PKR {e.new_price * qty}</p>
-                  <span 
-                    onClick={() => removeFromCart(e.id)} 
-                    style={{ cursor: 'pointer', color: 'red', fontSize: '12px', fontWeight: 'bold' }}>
-                    ❌
-                  </span>
+              <div key={e.id}>
+                <div className="cartitems-format cartitems-format-main" style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 1fr 1fr 1fr 1fr', alignItems: 'center', gap: '20px', padding: '15px 0', color: '#334155', fontSize: '16px', fontWeight: '500', borderBottom: '1px solid #f1f5f9' }}>
+                  <img src={e.image} alt="" style={{ height: '60px', width: '60px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e2e8f0' }} />
+                  <p>{e.name}</p>
+                  <p>${e.new_price}</p>
+                  <button style={{ width: '50px', height: '40px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '6px', fontWeight: 'bold' }}>{cartItems[e.id]}</button>
+                  <p>${e.new_price * cartItems[e.id]}</p>
+                  <img onClick={() => removeFromCart(e.id)} src="https://static.vecteezy.com/system/resources/thumbnails/018/887/462/small/signs-close-icon-png.png" alt="remove" style={{ width: '20px', cursor: 'pointer' }} />
                 </div>
               </div>
             );
           }
           return null;
         })}
-      </div>
 
-      {/* Promo Code & Totals Section */}
-      <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', boxSizing: 'border-box' }}>
-        
-        {/* Promo Code Box */}
-        <div style={{ width: '100%', background: '#f9fafb', padding: '10px 12px', border: '1px solid #e5e7eb', borderRadius: '6px', boxSizing: 'border-box' }}>
-          <h3 style={{ fontSize: '13px', margin: '0 0 3px 0', fontWeight: 'bold' }}>Promo Code</h3>
-          <p style={{ fontSize: '11px', color: '#6b7280', margin: '0 0 8px 0' }}>Use (FARAZ) for 75% off</p>
-          <div style={{ display: 'flex', gap: '6px', width: '100%', boxSizing: 'border-box' }}>
-            <input 
-              type="text" 
-              placeholder="Enter Code" 
-              value={promoCode} 
-              onChange={(e) => setPromoCode(e.target.value)}
-              style={{ flex: 1, padding: '6px 8px', border: '1px solid #ccc', borderRadius: '4px', fontSize: '12px', outline: 'none', boxSizing: 'border-box', minWidth: 0 }}
-            />
-            <button 
-              onClick={handleApplyPromo}
-              style={{ padding: '6px 12px', background: '#000', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold', flexShrink: 0 }}>
-              Apply
-            </button>
-          </div>
-          {promoMessage && <p style={{ marginTop: '6px', fontSize: '11px', fontWeight: 'bold', color: discount > 0 ? 'green' : 'red' }}>{promoMessage}</p>}
-        </div>
-
-        {/* Cart Totals Box */}
-        <div style={{ width: '100%', background: '#f9fafb', padding: '10px 12px', border: '1px solid #e5e7eb', borderRadius: '6px', boxSizing: 'border-box' }}>
-          <h3 style={{ fontSize: '13px', margin: '0 0 8px 0', fontWeight: 'bold' }}>Cart Totals</h3>
-          <div style={{ display: 'flex', justifyContent: 'space-between', margin: '5px 0', fontSize: '12px' }}>
-            <p style={{ margin: 0, color: '#4b5563' }}>Subtotal</p>
-            <p style={{ margin: 0, fontWeight: '500' }}>PKR {subtotal}</p>
-          </div>
-          {discount > 0 && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', margin: '5px 0', color: 'green', fontWeight: 'bold', fontSize: '12px' }}>
-              <p style={{ margin: 0 }}>Discount (75%)</p>
-              <p style={{ margin: 0 }}>- PKR {Math.round(subtotal * discount)}</p>
+        {/* Cart Totals Section */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '40px' }}>
+          <div style={{ width: '100%', maxWidth: '400px', background: '#f8fafc', padding: '25px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+            <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px', color: '#1e293b' }}>Cart Totals</h2>
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #e2e8f0', color: '#64748b' }}>
+                <p>Subtotal</p>
+                <p style={{ fontWeight: '600', color: '#1e293b' }}>${getTotalCartAmount()}</p>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #e2e8f0', color: '#64748b' }}>
+                <p>Shipping Fee</p>
+                <p style={{ fontWeight: '600', color: '#16a34a' }}>Free</p>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 0', fontSize: '18px', fontWeight: 'bold', color: '#1e293b' }}>
+                <p>Total</p>
+                <p>${getTotalCartAmount()}</p>
+              </div>
             </div>
-          )}
-          <div style={{ display: 'flex', justifyContent: 'space-between', margin: '5px 0', fontSize: '12px' }}>
-            <p style={{ margin: 0, color: '#4b5563' }}>Shipping Fee</p>
-            <p style={{ margin: 0, fontWeight: '500' }}>Free</p>
+
+            {getTotalCartAmount() > 0 && (
+              <button 
+                onClick={() => { setShowModal(true); setOrderPlaced(false); }} 
+                style={{ width: '100%', height: '50px', outline: 'none', border: 'none', background: '#0f172a', color: '#fff', fontSize: '15px', fontWeight: 'bold', cursor: 'pointer', borderRadius: '8px', marginTop: '20px' }}
+              >
+                PROCEED TO CHECKOUT
+              </button>
+            )}
           </div>
-          <hr style={{ border: '0', borderTop: '1px solid #e5e7eb', margin: '6px 0' }} />
-          <div style={{ display: 'flex', justifyContent: 'space-between', margin: '5px 0', fontWeight: 'bold', fontSize: '14px' }}>
-            <p style={{ margin: 0 }}>Total</p>
-            <p style={{ margin: 0 }}>PKR {finalTotal}</p>
-          </div>
-          <button 
-            onClick={() => setShowCheckoutModal(true)}
-            style={{ width: '100%', padding: '9px', background: '#dc2626', color: 'white', border: 'none', fontWeight: 'bold', borderRadius: '4px', cursor: 'pointer', marginTop: '10px', fontSize: '13px', boxSizing: 'border-box' }}>
-            PROCEED TO CHECKOUT
-          </button>
         </div>
+
       </div>
 
       {/* Checkout Popup Modal */}
-      {showCheckoutModal && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, padding: '10px', boxSizing: 'border-box' }}>
-          <div style={{ background: '#fff', padding: '15px', borderRadius: '8px', width: '100%', maxWidth: '360px', boxShadow: '0 4px 12px rgba(0,0,0,0.2)', boxSizing: 'border-box', maxHeight: '90vh', overflowY: 'auto' }}>
-            <h3 style={{ margin: '0 0 10px 0', fontSize: '15px', fontWeight: 'bold' }}>Checkout Details</h3>
-            <form onSubmit={handleConfirmOrder}>
-              <div style={{ margin: '6px 0' }}>
-                <label style={{ fontSize: '11px', fontWeight: 'bold', display: 'block', color: '#374151' }}>Full Name</label>
-                <input 
-                  type="text" 
-                  required 
-                  placeholder="Enter your name" 
-                  value={customerDetails.name}
-                  onChange={(e) => setCustomerDetails({...customerDetails, name: e.target.value})}
-                  style={{ width: '100%', padding: '6px', marginTop: '2px', border: '1px solid #ccc', borderRadius: '4px', fontSize: '12px', boxSizing: 'border-box', outline: 'none' }}
-                />
-              </div>
-              <div style={{ margin: '6px 0' }}>
-                <label style={{ fontSize: '11px', fontWeight: 'bold', display: 'block', color: '#374151' }}>Phone Number</label>
-                <input 
-                  type="text" 
-                  required 
-                  placeholder="03XXXXXXXXX" 
-                  value={customerDetails.phone}
-                  onChange={(e) => setCustomerDetails({...customerDetails, phone: e.target.value})}
-                  style={{ width: '100%', padding: '6px', marginTop: '2px', border: '1px solid #ccc', borderRadius: '4px', fontSize: '12px', boxSizing: 'border-box', outline: 'none' }}
-                />
-              </div>
-              <div style={{ margin: '6px 0' }}>
-                <label style={{ fontSize: '11px', fontWeight: 'bold', display: 'block', color: '#374151' }}>Shipping Address</label>
-                <textarea 
-                  required 
-                  placeholder="Enter complete address" 
-                  value={customerDetails.address}
-                  onChange={(e) => setCustomerDetails({...customerDetails, address: e.target.value})}
-                  style={{ width: '100%', padding: '6px', marginTop: '2px', border: '1px solid #ccc', borderRadius: '4px', height: '40px', fontSize: '12px', boxSizing: 'border-box', outline: 'none' }}
-                />
-              </div>
+      {showModal && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0, 0, 0, 0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, padding: '20px' }}>
+          <div style={{ background: '#ffffff', width: '100%', maxWidth: '480px', padding: '30px', borderRadius: '12px', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', position: 'relative', maxHeight: '90vh', overflowY: 'auto' }}>
+            
+            <button 
+              onClick={() => setShowModal(false)}
+              style={{ position: 'absolute', top: '15px', right: '15px', background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#64748b', fontWeight: 'bold' }}
+            >
+              &times;
+            </button>
 
-              <div style={{ margin: '8px 0' }}>
-                <label style={{ fontSize: '11px', fontWeight: 'bold', display: 'block', marginBottom: '4px', color: '#374151' }}>Payment Method</label>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                  {['JazzCash', 'EasyPaisa', 'Credit Card', 'Debit Card', 'COD (Cash on Delivery)'].map((method) => (
-                    <label key={method} style={{ fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <input 
-                        type="radio" 
-                        name="paymentMethod" 
-                        value={method} 
-                        checked={selectedPayment === method} 
-                        onChange={(e) => setSelectedPayment(e.target.value)}
-                      />
-                      {method}
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              <div style={{ display: 'flex', gap: '6px', marginTop: '10px' }}>
+            <h3 style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '20px', color: '#1e293b', textAlign: 'center' }}>Checkout Details</h3>
+            
+            {orderPlaced ? (
+              <div style={{ textAlign: 'center', padding: '30px 0' }}>
+                <h4 style={{ color: '#16a34a', fontSize: '22px', marginBottom: '10px' }}>🎉 Order Placed Successfully!</h4>
+                <p style={{ color: '#64748b', marginBottom: '25px', fontSize: '14px' }}></p>
                 <button 
-                  type="button" 
-                  onClick={() => setShowCheckoutModal(false)}
-                  style={{ flex: 1, padding: '7px', background: '#e5e7eb', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer', fontSize: '12px', color: '#374151' }}>
-                  Cancel
+                  onClick={() => setShowModal(false)}
+                  style={{ background: '#0f172a', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}
+                >
+                  Close
                 </button>
-                <button 
-                  type="submit" 
-                  style={{ flex: 1, padding: '7px', background: '#25D366', color: '#fff', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer', fontSize: '12px' }}>
+              </div>
+            ) : (
+              <form onSubmit={handleOrderSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '5px', color: '#475569' }}>Full Name</label>
+                  <input 
+                    type="text" placeholder="e.g. Faraz Qureshi" value={name} onChange={(e) => setName(e.target.value)} required
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '5px', color: '#475569' }}>Email Address</label>
+                  <input 
+                    type="email" placeholder="e.g. faraz@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} required
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '5px', color: '#475569' }}>Phone Number</label>
+                  <input 
+                    type="text" placeholder="e.g. 03001234567" value={phone} onChange={(e) => setPhone(e.target.value)} required
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '5px', color: '#475569' }}>Delivery Address</label>
+                  <textarea 
+                    placeholder="Enter your complete delivery address..." value={address} onChange={(e) => setAddress(e.target.value)} required rows="2"
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', boxSizing: 'border-box', fontFamily: 'sans-serif' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '5px', color: '#475569' }}>Payment Method</label>
+                  <select 
+                    value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', background: '#fff', boxSizing: 'border-box' }}
+                  >
+                    <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
+                    <option value="JazzCash">JazzCash</option>
+                    <option value="EasyPaisa">EasyPaisa</option>
+                  </select>
+                </div>
+                <button type="submit" style={{ background: '#16a34a', color: '#fff', border: 'none', padding: '14px', borderRadius: '8px', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', marginTop: '10px' }}>
                   Confirm Order
                 </button>
-              </div>
-            </form>
+              </form>
+            )}
+
           </div>
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default CartItems
+export default CartItems;

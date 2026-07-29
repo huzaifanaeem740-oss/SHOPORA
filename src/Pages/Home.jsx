@@ -15,9 +15,33 @@ const Home = () => {
   return (
     <div className="home-container">
       
+      {/* Inline Animations for Shoes & Text */}
+      <style>
+        {`
+          @keyframes floatShoes {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+          }
+
+          @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-40px); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+
+          .hero-animated-img {
+            animation: floatShoes 4s ease-in-out infinite;
+          }
+
+          .hero-animated-text {
+            animation: slideInLeft 0.8s ease-out forwards;
+          }
+        `}
+      </style>
+
       {/* Hero Section */}
       <div className="hero-section">
-        <div className="hero-left">
+        <div className="hero-left hero-animated-text">
           <p className="hero-tag">JUST IN • NIKE AIR JORDAN</p>
           <div>
             <h1 className="hero-title">ELEGANCE &</h1>
@@ -29,9 +53,9 @@ const Home = () => {
           </div>
         </div>
         
-        <div className="hero-right">
-          <img src={hero_image} alt="hero" />
-        </div>
+     <div className="hero-right hero-animated-img">
+  <img src={hero_image} alt="hero" style={{ marginTop: '30px' }} />
+</div>
       </div>
 
       {/* Vest.png Banner Section */}

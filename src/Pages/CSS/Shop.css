@@ -7,6 +7,13 @@
   box-sizing: border-box;
   background: #fbfbfb;
   padding-bottom: 50px;
+  overflow-x: hidden; /* Neeche wala unwanted horizontal slide/scroll bar khatam karne ke liye */
+}
+
+/* Body aur HTML par horizontal scrollbar rokne ke liye */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
 }
 
 /* Banner Styling */
@@ -31,7 +38,14 @@
   transform: scale(1.01);
 }
 
-/* Products Grid Styling */
+/* Products Grid Styling (Shop.jsx ke liye zaroori) */
+.shop-products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  width: 100%;
+}
+
 .shop-category {
   width: 85%;
   max-width: 1400px;
@@ -49,12 +63,22 @@
   color: #111;
 }
 
+/* --- MOBILE DROPDOWN & DESKTOP SWITCH CLASSES --- */
+.mobile-dropdown-filter {
+  display: none !important;
+}
+
+.desktop-sub-filter {
+  display: flex !important;
+}
+
 /* --- RESPONSIVE MEDIA QUERIES --- */
 @media (max-width: 1024px) {
   .shop-banner-container,
   .shop-category {
     width: 90%;
   }
+  .shop-products-grid,
   .shop-category {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
@@ -68,11 +92,21 @@
     border-radius: 8px;
   }
 
-  /* Mobile screen par 2 columns set karne ke liye */
+  /* Mobile view par sub-category buttons chup jayenge aur dropdown show hoga */
+  .desktop-sub-filter {
+    display: none !important;
+  }
+  
+  .mobile-dropdown-filter {
+    display: block !important;
+  }
+
+  /* Mobile screen par strictly 2 columns set karne ke liye */
+  .shop-products-grid,
   .shop-category {
-    width: 95%;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    width: 95% !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
   }
 }
 
@@ -82,6 +116,7 @@
     margin: 15px auto 10px auto;
   }
   
+  .shop-products-grid,
   .shop-category {
     gap: 10px;
   }
