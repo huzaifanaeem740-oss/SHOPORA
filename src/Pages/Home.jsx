@@ -42,7 +42,7 @@ const Home = () => {
       {/* Hero Section */}
       <div className="hero-section">
         <div className="hero-left hero-animated-text">
-          <p className="hero-tag">JUST IN • NIKE AIR JORDAN</p>
+          <pre className="hero-tag">VestroX  - Wear the Legacy.</pre>
           <div>
             <h1 className="hero-title">ELEGANCE &</h1>
             <h1 className="hero-title">PURE STYLE.</h1>
@@ -53,14 +53,18 @@ const Home = () => {
           </div>
         </div>
         
-     <div className="hero-right hero-animated-img">
-  <img src={hero_image} alt="hero" style={{ marginTop: '30px' }} />
-</div>
+        <div className="hero-right hero-animated-img">
+          <img src={hero_image} alt="hero" style={{ marginTop: '30px' }} />
+        </div>
       </div>
 
-      {/* Vest.png Banner Section */}
+      {/* Vest.png Animated Banner Section */}
       <div className="vest-banner-container">
-        <img src={vest_banner} alt="Vest Banner" />
+        <img 
+          src={vest_banner} 
+          alt="Vest Banner" 
+          className="animated-vest-banner"
+        />
       </div>
 
       {/* Exclusive Offers Banner */}

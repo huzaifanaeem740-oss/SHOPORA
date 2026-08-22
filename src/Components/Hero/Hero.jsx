@@ -1,29 +1,45 @@
-import React from 'react';
-import './Hero.css';
-import arrow_icon from '../Assets/arrow.png';
-import jordan_shoe from '../Assets/download.png';
+import React from "react";
+import { Link } from "react-router-dom";
+import "./Hero.css";
+import heroModel from "../Assets/hero_model.png"; // Right side model image
 
 const Hero = () => {
   return (
-    <div className='hero'>
-      <div className="hero-left">
-        <h2>JUST IN • NIKE AIR JORDAN</h2>
-        <div className="hero-heading">
-          <p>ELEGANCE &</p>
-          <p className="hero-highlight">PURE STYLE.</p>
-        </div>
-        <div className="hero-latest-btn">
-          <div>SHOP COLLECTION</div>
-          <img src={arrow_icon} alt="arrow icon" />
-        </div>
-      </div>
+    <div className="hero-section-container">
+      <div className="hero-split-card">
+        
+        {/* LEFT SIDE: Dark Charcoal Section */}
+        <div className="hero-left-content">
+          <span className="hero-tag">NEW COLLECTION 2026</span>
+          <h1 className="hero-title">VESTRO X</h1>
+          <p className="hero-subtitle">URBAN APPAREL & STREETWEAR</p>
+          <p className="hero-desc">
+            Wear confidence. Live excellence. Premium quality crafted just for you.
+          </p>
+          
+          <Link to="/shop" className="hero-cta-btn">
+            SHOP NOW &rarr;
+          </Link>
 
-      <div className="hero-right">
-        <img 
-          src={jordan_shoe} 
-          alt="Air Jordan 1 Retro High OG Praline" 
-          className="hero-new-logo"
-        />
+          {/* Minimalist Feature Badges */}
+          <div className="hero-features">
+            <div className="feature-item">
+              <span>✓</span> 100% Original
+            </div>
+            <div className="feature-item">
+              <span>⚡</span> Fast Shipping
+            </div>
+            <div className="feature-item">
+              <span>↺</span> Easy Returns
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT SIDE: Smooth Image Container */}
+        <div className="hero-right-image">
+          <img src={heroModel} alt="Vestro X Streetwear Model" />
+        </div>
+
       </div>
     </div>
   );

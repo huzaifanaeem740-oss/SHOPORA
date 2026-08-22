@@ -1,281 +1,187 @@
-.about-us-container {
+/* Page Setup & Off-White Theme */
+.about-container {
   width: 100%;
-  padding: 60px 8%;
-  background-color: #f9fafb;
-  color: #111827;
+  min-height: 85vh;
+  background-color: #fafafa !important;
+  padding: 50px 20px 80px 20px;
   box-sizing: border-box;
-  overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
 }
 
-/* Header */
 .about-header {
   text-align: center;
-  margin-bottom: 70px;
+  max-width: 700px;
+  margin: 0 auto 50px auto;
 }
 
 .about-header h1 {
-  font-size: 48px;
-  font-weight: 900;
-  color: #1f2937;
-  margin-bottom: 15px;
+  font-size: 38px;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+}
+
+.about-header h1 span {
+  color: #374151;
+  text-decoration: underline;
+  text-underline-offset: 6px;
 }
 
 .about-header p {
-  font-size: 18px;
   color: #6b7280;
-  max-width: 600px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Three Cards Section Grid */
+.about-cards-wrapper {
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 0 15px;
-  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
 }
 
-/* Main Story */
-.about-story {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 60px;
-  margin-bottom: 90px;
-}
-
-.about-story-left {
-  flex: 1.2;
-}
-
-.about-story-left h2 {
-  font-size: 36px;
-  font-weight: 800;
-  margin-bottom: 25px;
-}
-
-.about-story-left p {
-  font-size: 16px;
-  line-height: 1.8;
-  color: #4b5563;
-  margin-bottom: 20px;
-}
-
-.about-story-right {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.about-story-right img {
-  width: 90%;
-  max-width: 400px;
-  height: auto;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-}
-
-/* Vision/Mission */
-.about-vision-mission {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-bottom: 90px;
-}
-
-.vision-card {
-  flex: 1;
+.about-card {
   background: #ffffff;
-  padding: 40px;
+  padding: 36px 24px;
   border-radius: 20px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+  border: 1px solid #e5e7eb;
   text-align: center;
-  box-sizing: border-box;
-}
-
-.vision-card h3 {
-  font-size: 28px;
-  font-weight: 800;
-  color: #ea580c; /* Brand Accent */
-  margin-bottom: 20px;
-}
-
-.vision-card p {
-  font-size: 16px;
-  line-height: 1.8;
-  color: #374151;
-}
-
-/* Values/Promises */
-.about-values {
-  margin-bottom: 90px;
-  text-align: center;
-}
-
-.about-values h2 {
-  font-size: 36px;
-  font-weight: 800;
-  margin-bottom: 50px;
-}
-
-.values-grid {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-}
-
-.value-item {
-  flex: 1;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #ffffff;
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.05);
-  box-sizing: border-box;
 }
 
-.value-item img {
-  width: 50px;
-  height: 50px;
-  margin-bottom: 20px;
+.about-card:hover {
+  transform: translateY(-6px);
+  border-color: #9ca3af;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
 }
 
-.value-item h4 {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 15px;
-}
-
-.value-item p {
-  font-size: 15px;
-  color: #4b5563;
-  line-height: 1.6;
-}
-
-/* Join Us */
-.about-join-us {
-  text-align: center;
-  background: #111827;
-  color: #ffffff;
-  padding: 60px 40px;
-  border-radius: 20px;
-  box-sizing: border-box;
-}
-
-.about-join-us h2 {
-  font-size: 36px;
-  font-weight: 800;
-  margin-bottom: 25px;
-}
-
-.about-join-us p {
-  font-size: 16px;
-  color: #d1d5db;
-  line-height: 1.8;
-  max-width: 700px;
-  margin: 0 auto 30px auto;
-}
-
-.about-socials {
-  margin-bottom: 40px;
-  font-size: 15px;
+/* Image Icon Styling */
+.about-icon-box {
+  width: 64px;
+  height: 64px;
+  background: #f3f4f6;
+  border-radius: 16px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 5px;
+  justify-content: center;
+  padding: 14px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
 }
 
-.about-socials span {
-  color: #9ca3af;
-  margin-right: 10px;
+.about-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: contrast(110%);
 }
 
-.about-socials a {
-  color: #ffffff;
-  text-decoration: none;
-  margin: 0 5px;
-}
-
-.about-socials a:hover {
-  text-decoration: underline;
-}
-
-.shop-now-btn {
-  background: #ea580c;
-  color: #ffffff;
-  padding: 16px 40px;
-  border-radius: 40px;
-  border: none;
-  font-size: 16px;
+.about-card h3 {
+  font-size: 19px;
   font-weight: 700;
-  cursor: pointer;
-  transition: background 0.3s ease;
+  color: #111827;
+  margin: 0 0 12px 0;
 }
 
-.shop-now-btn:hover {
-  background: #c2410c;
+.about-card p {
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.55;
+  margin: 0;
 }
 
-/* --- Responsive Media Queries --- */
+/* Bottom Stats Banner */
+.about-stats-banner {
+  max-width: 1100px;
+  margin: 45px auto 0 auto;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 28px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+}
 
-@media (max-width: 992px) {
-  .about-story, 
-  .about-vision-mission, 
-  .values-grid {
+.stat-item {
+  text-align: center;
+}
+
+.stat-item h2 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.stat-item p {
+  font-size: 13.5px;
+  color: #6b7280;
+  font-weight: 600;
+  margin: 0;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 40px;
+  background-color: #e5e7eb;
+}
+
+/* CSS Keyframe Animations */
+.animate-fade-down {
+  animation: fadeDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease forwards;
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 850px) {
+  .about-cards-wrapper {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .about-stats-banner {
     flex-direction: column;
-    gap: 30px;
-  }
-  
-  .about-story {
-    gap: 40px;
+    gap: 20px;
   }
 
-  .about-story-right img {
-    max-width: 320px;
-  }
-}
-
-@media (max-width: 768px) {
-  .about-us-container {
-    padding: 40px 5%;
+  .stat-divider {
+    width: 60%;
+    height: 1px;
   }
 
   .about-header h1 {
-    font-size: 36px;
-  }
-
-  .about-header p {
-    font-size: 16px;
-  }
-
-  .about-story-left h2,
-  .about-vision-mission h3,
-  .about-values h2,
-  .about-join-us h2 {
     font-size: 28px;
-  }
-
-  .vision-card, 
-  .value-item {
-    padding: 30px 20px;
-  }
-
-  .about-join-us {
-    padding: 40px 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .about-header h1 {
-    font-size: 30px;
-  }
-
-  .about-story-left h2,
-  .about-values h2,
-  .about-join-us h2 {
-    font-size: 24px;
-  }
-
-  .shop-now-btn {
-    width: 100%;
-    padding: 14px 20px;
-    font-size: 15px;
   }
 }

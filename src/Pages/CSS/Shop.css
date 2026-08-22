@@ -1,123 +1,109 @@
-.shop {
+/* NAVBAR GREY LINE / BORDER REMOVAL FIX */
+header, nav, .navbar, [class*="nav"] {
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+/* Container Layout Setup */
+.shop-container {
   width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 16px 0 16px;
   box-sizing: border-box;
-  background: #fbfbfb;
-  padding-bottom: 50px;
-  overflow-x: hidden; /* Neeche wala unwanted horizontal slide/scroll bar khatam karne ke liye */
 }
 
-/* Body aur HTML par horizontal scrollbar rokne ke liye */
-html, body {
-  overflow-x: hidden !important;
-  max-width: 100% !important;
-}
-
-/* Banner Styling */
-.shop-banner-container {
-  width: 85%;
-  max-width: 1400px;
-  margin: 40px auto 20px auto;
-  border-radius: 12px;
+/* BANNER CONTAINER - NO GREY PATTI FIX */
+.banner-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 20px auto;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  background: transparent !important;
+  display: flex;
+  justify-content: center;
 }
 
-.shop-banner-container img {
+/* BANNER IMAGE & SMOOTH SLIDE-UP ANIMATION */
+.animated-banner {
   width: 100%;
   height: auto;
   display: block;
-  object-fit: cover;
-  transition: transform 0.3s ease;
+  border-radius: 16px;
+  animation: bannerSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.shop-banner-container img:hover {
-  transform: scale(1.01);
+/* Modern Smooth Slide Up + Fade Animation */
+@keyframes bannerSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Products Grid Styling (Shop.jsx ke liye zaroori) */
+/* Subcategory Navigation Layout */
+.subcategory-wrapper {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.subcategory-dropdown {
+  display: none;
+  width: 100%;
+  max-width: 280px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.subcategory-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* Mobile Responsive Setup */
+@media (max-width: 768px) {
+  .subcategory-dropdown {
+    display: block; /* Dropdown on mobile */
+  }
+
+  .subcategory-buttons {
+    display: none; /* Hide buttons on mobile */
+  }
+
+  .banner-wrapper {
+    max-width: 100%;
+  }
+}
+
+/* PRODUCT GRID: 4 Items per row on Desktop */
 .shop-products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
+  gap: 16px;
   width: 100%;
 }
 
-.shop-category {
-  width: 85%;
-  max-width: 1400px;
-  margin: 20px auto;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-}
-
-.shop-category h2 {
-  grid-column: 1 / -1;
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  color: #111;
-}
-
-/* --- MOBILE DROPDOWN & DESKTOP SWITCH CLASSES --- */
-.mobile-dropdown-filter {
-  display: none !important;
-}
-
-.desktop-sub-filter {
-  display: flex !important;
-}
-
-/* --- RESPONSIVE MEDIA QUERIES --- */
-@media (max-width: 1024px) {
-  .shop-banner-container,
-  .shop-category {
-    width: 90%;
-  }
-  .shop-products-grid,
-  .shop-category {
+@media (max-width: 992px) {
+  .shop-products-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
   }
 }
 
-@media (max-width: 768px) {
-  .shop-banner-container {
-    width: 92%;
-    margin: 20px auto 10px auto;
-    border-radius: 8px;
-  }
-
-  /* Mobile view par sub-category buttons chup jayenge aur dropdown show hoga */
-  .desktop-sub-filter {
-    display: none !important;
-  }
-  
-  .mobile-dropdown-filter {
-    display: block !important;
-  }
-
-  /* Mobile screen par strictly 2 columns set karne ke liye */
-  .shop-products-grid,
-  .shop-category {
-    width: 95% !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .shop-banner-container {
-    width: 95%;
-    margin: 15px auto 10px auto;
-  }
-  
-  .shop-products-grid,
-  .shop-category {
+@media (max-width: 576px) {
+  .shop-products-grid {
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
 }

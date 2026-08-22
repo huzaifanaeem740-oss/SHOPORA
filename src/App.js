@@ -15,6 +15,7 @@ import AdminPanel from './Admin/AdminPanel';
 import AboutUs from './Pages/AboutUs';
 import CartDrawer from './Components/CartDrawer/CartDrawer';
 import Wishlist from './Pages/Wishlist';
+import MyOrders from './Pages/MyOrders';
 
 
 function Layout() {
@@ -43,6 +44,7 @@ function Layout() {
         </Route>
 
         <Route path="/cart" element={<Cart />} />
+        <Route path="/myorders" element={<MyOrders />} />
         <Route path="/login" element={<LoginSignup />} />
         <Route path="/admin/*" element={<AdminPanel />} />
         <Route path="/contact" element={<Contact />} />

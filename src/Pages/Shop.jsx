@@ -1,244 +1,243 @@
-import React, { useState, useContext } from 'react';
-import './CSS/Shop.css';
-import { ShopContext } from '../Context/ShopContext';
-import Item from '../Components/Item/Item';
+import React, { useContext, useState } from "react";
+import { ShopContext } from "../Context/ShopContext";
+import Item from "../Components/Item/Item";
+import "./CSS/Shop.css";
 
-// Banners import
-import banner_mens from '../Components/Assets/banner_mens.png';
-import banner_womens from '../Components/Assets/banner_womens.png';
-import banner_kids from '../Components/Assets/banner_kids.png';
+import banner_mens from "../Components/Assets/banner_mens.png";
+import banner_womens from "../Components/Assets/banner_womens.png";
+import banner_kids from "../Components/Assets/banner_kids.png";
 
 const Shop = () => {
-  const { all_product } = useContext(ShopContext);
-  
-  const [selectedCategory, setSelectedCategory] = useState('men');
-  const [activeSubFilter, setActiveSubFilter] = useState('all');
+  const { all_product, loading } = useContext(ShopContext);
 
-  const getBanner = () => {
-    if (selectedCategory === 'men') return banner_mens;
-    if (selectedCategory === 'women') return banner_womens;
-    if (selectedCategory === 'kids') return banner_kids;
-    return banner_mens;
-  };
+  const [selectedMainCat, setSelectedMainCat] = useState("men");
+  const [selectedSubCat, setSelectedSubCat] = useState("all");
 
-  const handleMainCategory = (category) => {
-    setSelectedCategory(category);
-    setActiveSubFilter('all');
-  };
-
-  const renderSection = (title, allowedKeywords, sectionKey, isBlackBar = false) => {
-    if (activeSubFilter !== 'all' && activeSubFilter !== sectionKey) {
-      return null;
-    }
-
-    const filteredProducts = all_product.filter(item => {
-      if (item.category !== selectedCategory) return false;
-      if (isBlackBar) return false;
-
-      const itemName = (item.name || '').toLowerCase();
-      const itemType = (item.type || '').toLowerCase();
-
-      if (allowedKeywords.includes('shirt') || allowedKeywords.includes('top') || allowedKeywords.includes('jersey') || allowedKeywords.includes('t-shirt')) {
-        if (itemName.includes('watch') || itemName.includes('shoe') || itemName.includes('sneaker') || itemName.includes('belt') || itemName.includes('cap') || itemName.includes('perfume')) {
-          return false;
-        }
-      }
-
-      return allowedKeywords.some(keyword => 
-        itemName.includes(keyword) || itemType.includes(keyword)
-      );
-    });
-
-    if (filteredProducts.length === 0 && !isBlackBar) return null;
-
+  if (loading) {
     return (
-      <div key={title} id={sectionKey} className="shop-section-container" style={{ width: '85%', maxWidth: '1400px', margin: '30px auto' }}>
-        {isBlackBar ? (
-          <div style={{ background: '#0f172a', color: '#fff', padding: '14px 20px', borderRadius: '8px', marginBottom: '20px', textAlign: 'center', boxShadow: '0 4px 6px -1px rgb(0 0 / 0.1)' }}>
-            <h3 style={{ margin: 0, fontSize: '20px', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: '700' }}>{title}</h3>
-          </div>
-        ) : (
-          <div style={{ borderBottom: '2px solid #cbd5e1', paddingBottom: '8px', marginBottom: '20px' }}>
-            <h3 style={{ margin: 0, fontSize: '22px', fontWeight: '700', color: '#1e293b' }}>{title}</h3>
-          </div>
-        )}
+      <div style={{ textAlign: "center", padding: "100px 0", fontWeight: "bold" }}>
+        Loading products...
+      </div>
+    );
+  }
 
-        {filteredProducts.length > 0 && (
+  const currentBanner =
+    selectedMainCat === "women"
+      ? banner_womens
+      : selectedMainCat === "kids"
+      ? banner_kids
+      : banner_mens;
+
+  // Maps each subcategory button to all the possible "type" values used
+  // across men/women/kids data (the raw data isn't 100% consistent in naming,
+  // e.g. men's footwear uses "footwear" while kids' uses "shoe").
+  const subCategoryTypeMap = {
+    shirt: ["shirt"],
+    pant: ["pant"],
+    shoe: ["shoe", "footwear", "slipper", "slippers"],
+    watch: ["watch"],
+    perfume: ["perfume", "fragrances", "fragrance"],
+    belt: ["belt", "belts"],
+    cap: ["cap"],
+  };
+
+  // Section headings shown when "All" is selected — groups the shop into
+  // labeled blocks in a fixed order (Accessories bundles watch/perfume/belt/cap).
+  const sections = [
+    { label: "Shirts & Jerseys", types: subCategoryTypeMap.shirt },
+    { label: "Pants & Trousers", types: subCategoryTypeMap.pant },
+    { label: "Footwear", types: subCategoryTypeMap.shoe },
+    {
+      label: "Accessories",
+      types: [
+        ...subCategoryTypeMap.watch,
+        ...subCategoryTypeMap.perfume,
+        ...subCategoryTypeMap.belt,
+        ...subCategoryTypeMap.cap,
+      ],
+    },
+  ];
+
+  const getType = (product) =>
+    (product.type || product.subCategory || product.subcategory || "").toLowerCase().trim();
+
+  // Products matching the selected main category (men / women / kids)
+  const mainCategoryProducts = (all_product || []).filter((product) => {
+    const cat = (product.category || "").toLowerCase().trim();
+    return cat === selectedMainCat;
+  });
+
+  // When a specific subcategory is chosen, show a single flat grid (no headings)
+  const singleSubCategoryProducts =
+    selectedSubCat !== "all"
+      ? mainCategoryProducts.filter((product) => {
+          const acceptableTypes = subCategoryTypeMap[selectedSubCat] || [selectedSubCat];
+          return acceptableTypes.includes(getType(product));
+        })
+      : [];
+
+  const subCategories = [
+    { label: "All", value: "all" },
+    { label: "Shirts & Jerseys", value: "shirt" },
+    { label: "Pants & Trousers", value: "pant" },
+    { label: "Footwear", value: "shoe" },
+    { label: "Watches", value: "watch" },
+    { label: "Perfumes", value: "perfume" },
+    { label: "Belts", value: "belt" },
+    { label: "Caps", value: "cap" },
+  ];
+
+  return (
+    <div style={{ backgroundColor: "#ffffff", minHeight: "100vh", paddingBottom: "40px" }}>
+      <div className="shop-container">
+        
+        {/* CENTERED ANIMATED BANNER */}
+        <div className="banner-wrapper">
+          <img 
+            key={selectedMainCat} 
+            src={currentBanner} 
+            alt="Banner" 
+            className="animated-banner"
+          />
+        </div>
+
+        {/* MAIN CATEGORY BUTTONS */}
+        <div style={{ display: "flex", justifyContent: "center", gap: "8px", marginBottom: "16px" }}>
+          {["men", "women", "kids"].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => {
+                setSelectedMainCat(cat);
+                setSelectedSubCat("all");
+              }}
+              style={{
+                padding: "8px 24px",
+                borderRadius: "20px",
+                border: "none",
+                fontWeight: "700",
+                fontSize: "12px",
+                cursor: "pointer",
+                backgroundColor: selectedMainCat === cat ? "#00a8e8" : "#0b132b",
+                color: "#ffffff",
+                textTransform: "capitalize",
+              }}
+            >
+              {cat === "men" ? "Mens" : cat === "women" ? "Womens" : "Kids"}
+            </button>
+          ))}
+        </div>
+
+        {/* SUBCATEGORY NAVIGATION / DROPDOWN */}
+        <div className="subcategory-wrapper">
+          <select
+            className="subcategory-dropdown"
+            value={selectedSubCat}
+            onChange={(e) => setSelectedSubCat(e.target.value)}
+          >
+            {subCategories.map((sub) => (
+              <option key={sub.value} value={sub.value}>
+                {sub.label}
+              </option>
+            ))}
+          </select>
+
+          <div className="subcategory-buttons">
+            {subCategories.map((sub) => (
+              <button
+                key={sub.value}
+                onClick={() => setSelectedSubCat(sub.value)}
+                style={{
+                  padding: "6px 16px",
+                  borderRadius: "20px",
+                  border: "1px solid #cbd5e1",
+                  fontWeight: "600",
+                  fontSize: "11px",
+                  cursor: "pointer",
+                  backgroundColor: selectedSubCat === sub.value ? "#cbd5e1" : "#ffffff",
+                  color: "#334155",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                {sub.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* PRODUCT GRID */}
+        {selectedSubCat === "all" ? (
+          // "All" selected — show grouped sections with category headings
+          (() => {
+            const groupedSections = sections
+              .map((section) => ({
+                ...section,
+                items: mainCategoryProducts.filter((product) =>
+                  section.types.includes(getType(product))
+                ),
+              }))
+              .filter((section) => section.items.length > 0);
+
+            if (groupedSections.length === 0) {
+              return (
+                <div style={{ textAlign: "center", padding: "60px 0", color: "#6b7280", fontSize: "14px" }}>
+                  Is category mein abhi koi items nahi hain.
+                </div>
+              );
+            }
+
+            return groupedSections.map((section) => (
+              <div key={section.label} style={{ marginBottom: "36px" }}>
+                <h3
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "800",
+                    color: "#0b132b",
+                    marginBottom: "14px",
+                    paddingLeft: "4px",
+                    borderLeft: "4px solid #00a8e8",
+                  }}
+                >
+                  {section.label}
+                </h3>
+
+                <div className="shop-products-grid">
+                  {section.items.map((item, index) => (
+                    <Item
+                      key={item.id ? `${item.id}-${index}` : index}
+                      id={item.id || item._id}
+                      name={item.title || item.name}
+                      image={item.image}
+                      new_price={item.price || item.new_price}
+                      old_price={item.old_price}
+                    />
+                  ))}
+                </div>
+              </div>
+            ));
+          })()
+        ) : singleSubCategoryProducts.length > 0 ? (
+          // A specific subcategory selected — flat grid, no headings
           <div className="shop-products-grid">
-            {filteredProducts.map((item, i) => (
+            {singleSubCategoryProducts.map((item, index) => (
               <Item 
-                key={i} 
-                id={item.id} 
-                name={item.name} 
+                key={item.id ? `${item.id}-${index}` : index} 
+                id={item.id || item._id} 
+                name={item.title || item.name} 
                 image={item.image} 
-                new_price={item.new_price} 
+                new_price={item.price || item.new_price} 
                 old_price={item.old_price} 
               />
             ))}
           </div>
+        ) : (
+          <div style={{ textAlign: "center", padding: "60px 0", color: "#6b7280", fontSize: "14px" }}>
+            Is category mein abhi koi items nahi hain.
+          </div>
         )}
-      </div>
-    );
-  };
-
-  return (
-    <div className='shop-page' style={{ width: '100%', minHeight: '100vh', background: '#ffffff', paddingBottom: '50px', overflowX: 'hidden' }}>
-      
-      <div className="shop-hero" style={{ textAlign: 'center', padding: '20px 0' }}>
-        
-        {/* Banner */}
-        <div className="shop-banner-container" style={{ width: '70%', maxWidth: '750px', margin: '0 auto 20px auto' }}>
-          <img 
-            src={getBanner()} 
-            alt="Category Banner" 
-            style={{ width: '100%', height: 'auto', borderRadius: '12px', display: 'block', margin: '0 auto' }} 
-          />
-        </div>
-        
-        {/* Main Category Switch Buttons */}
-        <div className="main-category-filter" style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '15px', flexWrap: 'wrap' }}>
-          <button onClick={() => handleMainCategory('men')} style={btnStyle(selectedCategory === 'men')}>Mens</button>
-          <button onClick={() => handleMainCategory('women')} style={btnStyle(selectedCategory === 'women')}>Womens</button>
-          <button onClick={() => handleMainCategory('kids')} style={btnStyle(selectedCategory === 'kids')}>Kids</button>
-        </div>
-
-        {/* Desktop Buttons Filter (Hidden on Mobile via CSS) */}
-        <div className="sub-category-filter desktop-sub-filter" style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '12px', flexWrap: 'wrap' }}>
-          <button onClick={() => setActiveSubFilter('all')} style={subBtnStyle(activeSubFilter === 'all')}>All</button>
-          
-          {selectedCategory !== 'kids' ? (
-            <>
-              <button onClick={() => setActiveSubFilter('shirts')} style={subBtnStyle(activeSubFilter === 'shirts')}>Shirts & Jerseys</button>
-              <button onClick={() => setActiveSubFilter('pants')} style={subBtnStyle(activeSubFilter === 'pants')}>Pants & Trousers</button>
-              <button onClick={() => setActiveSubFilter('shoes')} style={subBtnStyle(activeSubFilter === 'shoes')}>Footwear</button>
-              <button onClick={() => setActiveSubFilter('watches')} style={subBtnStyle(activeSubFilter === 'watches')}>Watches</button>
-              <button onClick={() => setActiveSubFilter('perfumes')} style={subBtnStyle(activeSubFilter === 'perfumes')}>Perfumes</button>
-              <button onClick={() => setActiveSubFilter('belts')} style={subBtnStyle(activeSubFilter === 'belts')}>Belts</button>
-              <button onClick={() => setActiveSubFilter('caps')} style={subBtnStyle(activeSubFilter === 'caps')}>Caps</button>
-            </>
-          ) : (
-            <>
-              <button onClick={() => setActiveSubFilter('shirts')} style={subBtnStyle(activeSubFilter === 'shirts')}>T-Shirts</button>
-              <button onClick={() => setActiveSubFilter('pants')} style={subBtnStyle(activeSubFilter === 'pants')}>Shorts & Pants</button>
-              <button onClick={() => setActiveSubFilter('shoes')} style={subBtnStyle(activeSubFilter === 'shoes')}>Footwear</button>
-              <button onClick={() => setActiveSubFilter('watches')} style={subBtnStyle(activeSubFilter === 'watches')}>Watches</button>
-              <button onClick={() => setActiveSubFilter('perfumes')} style={subBtnStyle(activeSubFilter === 'perfumes')}>Perfumes</button>
-              <button onClick={() => setActiveSubFilter('caps')} style={subBtnStyle(activeSubFilter === 'caps')}>Caps</button>
-            </>
-          )}
-        </div>
-
-        {/* Mobile Dropdown Filter (Visible only on Mobile via CSS) */}
-        <div className="mobile-dropdown-filter">
-          <select 
-            value={activeSubFilter} 
-            onChange={(e) => setActiveSubFilter(e.target.value)}
-            style={{
-              width: '85%',
-              maxWidth: '300px',
-              padding: '10px 15px',
-              borderRadius: '20px',
-              border: '1px solid #cbd5e1',
-              background: '#f8fafc',
-              fontSize: '14px',
-              fontWeight: '500',
-              color: '#1e293b',
-              outline: 'none',
-              marginTop: '12px',
-              boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
-            }}
-          >
-            <option value="all">All Categories</option>
-            {selectedCategory !== 'kids' ? (
-              <>
-                <option value="shirts">Shirts & Jerseys</option>
-                <option value="pants">Pants & Trousers</option>
-                <option value="shoes">Footwear</option>
-                <option value="watches">Watches</option>
-                <option value="perfumes">Perfumes</option>
-                <option value="belts">Belts</option>
-                <option value="caps">Caps</option>
-              </>
-            ) : (
-              <>
-                <option value="shirts">T-Shirts</option>
-                <option value="pants">Shorts & Pants</option>
-                <option value="shoes">Footwear</option>
-                <option value="watches">Watches</option>
-                <option value="perfumes">Perfumes</option>
-                <option value="caps">Caps</option>
-              </>
-            )}
-          </select>
-        </div>
 
       </div>
-
-      {/* Render Sections */}
-      {selectedCategory === 'men' && (
-        <>
-          {renderSection("Shirts & Jersey's", ['shirt', 't-shirt', 'jersey', 'tee'], 'shirts')}
-          {renderSection("Pants & Trousers", ['pant', 'trouser', 'short', 'jean'], 'pants')}
-          {renderSection("Shoes & Slippers", ['shoe', 'slipper', 'footwear', 'sneaker', 'sandal'], 'shoes')}
-          {renderSection("ACCESSORIES", [], 'acc', true)}
-          {renderSection("Watches", ['watch'], 'watches')}
-          {renderSection("Perfumes", ['perfume', 'fragrance'], 'perfumes')}
-          {renderSection("Belts", ['belt'], 'belts')}
-          {renderSection("Caps", ['cap', 'hat'], 'caps')}
-        </>
-      )}
-
-      {selectedCategory === 'women' && (
-        <>
-          {renderSection("Shirts & Jersey's", ['shirt', 'top', 'jersey', 'tee', 't-shirt'], 'shirts')}
-          {renderSection("Pants & Trousers", ['pant', 'short', 'trouser', 'jean'], 'pants')}
-          {renderSection("Shoes & Slippers", ['shoe', 'slipper', 'footwear', 'sneaker', 'sandal'], 'shoes')}
-          {renderSection("ACCESSORIES", [], 'acc', true)}
-          {renderSection("Watches", ['watch'], 'watches')}
-          {renderSection("Perfumes", ['perfume', 'fragrance'], 'perfumes')}
-          {renderSection("Belts", ['belt'], 'belts')}
-          {renderSection("Caps", ['cap', 'hat'], 'caps')}
-        </>
-      )}
-
-      {selectedCategory === 'kids' && (
-        <>
-          {renderSection("T-Shirts", ['shirt', 't-shirt', 'tee', 'jersey'], 'shirts')}
-          {renderSection("Shorts & Pants", ['pant', 'short', 'trouser'], 'pants')}
-          {renderSection("Footwear", ['shoe', 'slipper', 'footwear', 'sneaker'], 'shoes')}
-          {renderSection("ACCESSORIES", [], 'acc', true)}
-          {renderSection("Watches", ['watch'], 'watches')}
-          {renderSection("Perfumes", ['perfume', 'fragrance'], 'perfumes')}
-          {renderSection("Caps", ['cap', 'hat'], 'caps')}
-        </>
-      )}
-
     </div>
   );
 };
-
-const btnStyle = (isActive) => ({
-  padding: '10px 22px',
-  background: isActive ? '#0ea5e9' : '#0f172a',
-  color: '#fff',
-  border: 'none',
-  borderRadius: '25px',
-  cursor: 'pointer',
-  fontSize: '14px',
-  fontWeight: '600',
-  transition: '0.3s'
-});
-
-const subBtnStyle = (isActive) => ({
-  padding: '6px 16px',
-  background: isActive ? '#334155' : '#e2e8f0',
-  color: isActive ? '#fff' : '#1e293b',
-  border: 'none',
-  borderRadius: '20px',
-  cursor: 'pointer',
-  fontSize: '12px',
-  fontWeight: '500',
-  transition: '0.3s'
-});
 
 export default Shop;

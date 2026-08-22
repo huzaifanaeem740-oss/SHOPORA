@@ -1,83 +1,73 @@
 import React from 'react';
+import './CSS/AboutUs.css';
 
-const AboutUs = () => {
+const About = () => {
   return (
-    <div style={{ backgroundColor: '#fafaf9', color: '#0f172a', minHeight: '80vh', padding: '60px 20px', fontFamily: 'sans-serif' }}>
-      
-      <style>
-        {`
-          @keyframes fadeInUp {
-            from {
-              opacity: 0;
-              transform: translateY(30px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
-          }
+    <div className="about-container">
+      {/* Header Section */}
+      <div className="about-header animate-fade-down">
+        <h1>ABOUT <span>VESTRO X</span></h1>
+        <p>Redefining modern fashion with style, premium quality, and effortless comfort tailored exclusively for you.</p>
+      </div>
 
-          .animate-fade {
-            animation: fadeInUp 0.8s ease-out forwards;
-          }
-
-          .about-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-          }
-        `}
-      </style>
-
-      <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center' }}>
-        
-        <div className="animate-fade" style={{ marginBottom: '50px' }}>
-          <h1 style={{ fontSize: '38px', fontWeight: '900', letterSpacing: '1px', marginBottom: '15px' }}>
-            ABOUT <span style={{ color: '#2563eb' }}>VESTRO X</span>
-          </h1>
-          <p style={{ fontSize: '18px', color: '#475569', maxWidth: '700px', margin: '0 auto', lineHeight: '1.6' }}>
-            Redefining modern fashion with style, premium quality, and effortless comfort tailored exclusively for you.
-          </p>
+      {/* Core Values Cards */}
+      <div className="about-cards-wrapper animate-slide-up">
+        <div className="about-card">
+          <div className="about-icon-box">
+            <img 
+              src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
+              alt="Our Mission" 
+              className="about-card-img"
+            />
+          </div>
+          <h3>Our Mission</h3>
+          <p>To deliver trendsetting streetwear and premium apparel that empower individuality and high-end confidence.</p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px', marginBottom: '60px' }}>
-          
-          <div className="animate-fade about-card" style={{ background: '#ffffff', padding: '35px 25px', borderRadius: '12px', border: '1px solid #e2e8f0', animationDelay: '0.2s' }}>
-            <div style={{ fontSize: '32px', marginBottom: '15px' }}>✨</div>
-            <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '10px' }}>Our Mission</h3>
-            <p style={{ color: '#64748b', fontSize: '15px', lineHeight: '1.5' }}>
-              To deliver trendsetting streetwear and premium apparel that empower individuality and high-end confidence.
-            </p>
+        <div className="about-card">
+          <div className="about-icon-box">
+            <img 
+              src="https://cdn-icons-png.flaticon.com/512/2912/2912761.png" 
+              alt="Quality Craftsmanship" 
+              className="about-card-img"
+            />
           </div>
-
-          <div className="animate-fade about-card" style={{ background: '#ffffff', padding: '35px 25px', borderRadius: '12px', border: '1px solid #e2e8f0', animationDelay: '0.4s' }}>
-            <div style={{ fontSize: '32px', marginBottom: '15px' }}>🛡️</div>
-            <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '10px' }}>Quality Craftsmanship</h3>
-            <p style={{ color: '#64748b', fontSize: '15px', lineHeight: '1.5' }}>
-              Every piece at Vestro X goes through strict quality checks using durable, breathable, and top-grade fabrics.
-            </p>
-          </div>
-
-          <div className="animate-fade about-card" style={{ background: '#ffffff', padding: '35px 25px', borderRadius: '12px', border: '1px solid #e2e8f0', animationDelay: '0.6s' }}>
-            <div style={{ fontSize: '32px', marginBottom: '15px' }}>🚀</div>
-            <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '10px' }}>Fast Delivery</h3>
-            <p style={{ color: '#64748b', fontSize: '15px', lineHeight: '1.5' }}>
-              We ensure seamless online shopping with swift doorstep deliveries and reliable customer support systems.
-            </p>
-          </div>
-
+          <h3>Quality Craftsmanship</h3>
+          <p>Every piece at Vestro X goes through strict quality checks using durable, breathable, and top-grade fabrics.</p>
         </div>
 
-        <div className="animate-fade" style={{ background: '#ffffff', padding: '40px', borderRadius: '12px', border: '1px solid #e2e8f0', textAlign: 'left', animationDelay: '0.8s' }}>
-          <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '15px', color: '#0f172a' }}>The Vestro X Story</h2>
-          <p style={{ color: '#475569', fontSize: '16px', lineHeight: '1.7', margin: 0 }}>
-            Founded with a passion for excellence, Vestro X brings together contemporary fashion aesthetics and daily wear comfort. Whether you are looking for classic everyday tees, statement hoodies, or signature styles, we strive to make every wardrobe exceptional.
-          </p>
+        <div className="about-card">
+          <div className="about-icon-box">
+            <img 
+              src="https://cdn-icons-png.flaticon.com/512/2838/2838694.png" 
+              alt="Fast Delivery" 
+              className="about-card-img"
+            />
+          </div>
+          <h3>Fast Delivery</h3>
+          <p>We ensure seamless online shopping with swift doorstep deliveries and reliable customer support systems.</p>
         </div>
+      </div>
 
+      {/* Brand Numbers Counter Banner */}
+      <div className="about-stats-banner animate-fade-in">
+        <div className="stat-item">
+          <h2>10k+</h2>
+          <p>Happy Customers</p>
+        </div>
+        <div className="stat-divider"></div>
+        <div className="stat-item">
+          <h2>100%</h2>
+          <p>Premium Fabrics</p>
+        </div>
+        <div className="stat-divider"></div>
+        <div className="stat-item">
+          <h2>24/7</h2>
+          <p>Dedicated Support</p>
+        </div>
       </div>
     </div>
   );
 };
 
-export default AboutUs;
+export default About;

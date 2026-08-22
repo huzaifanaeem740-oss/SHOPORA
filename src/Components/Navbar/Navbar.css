@@ -53,8 +53,17 @@
   font-size: 14px;
 }
 
-.search-icon {
+/* Real Grey Search Image Styling */
+.search-icon-img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
   cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.search-icon-img:hover {
+  opacity: 1;
 }
 
 .nav-login-cart {
@@ -123,6 +132,50 @@
 
 .nav-menu li {
   cursor: pointer;
+  position: relative;
+}
+
+/* Nav Link Base & Animated Underline Line */
+.nav-item {
+  text-decoration: none;
+  color: #626262;
+  padding: 6px 0;
+  display: inline-block;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0%;
+  height: 3px;
+  background-color: #171717; /* Highlight Line Color */
+  border-radius: 4px;
+  transition: width 0.35s cubic-bezier(0.25, 1, 0.5, 1), left 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  transform: translateX(-50%);
+}
+
+.nav-item:hover {
+  color: #171717;
+}
+
+.nav-item:hover::after {
+  width: 60%;
+  background-color: #888888; /* Hover Par Light Grey Line */
+}
+
+/* Active Link Highlight Line Animation */
+.nav-item.active {
+  color: #171717;
+  font-weight: 700;
+}
+
+.nav-item.active::after {
+  width: 100%;
+  background-color: #171717; /* Selected tab par solid dark line */
 }
 
 /* Black Marquee Strip Styling */
@@ -158,7 +211,7 @@
 
 @media (max-width: 900px) {
   .nav-search-box {
-    display: none; /* Mobile screen par search bar ko hidden rakhne ke liye taake layout na phatay */
+    display: none;
   }
   .nav-menu {
     gap: 20px;

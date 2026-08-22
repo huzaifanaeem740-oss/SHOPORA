@@ -1,179 +1,241 @@
 import React, { useContext, useState } from 'react';
-import './CartItems.css';
 import { ShopContext } from '../../Context/ShopContext';
-import { getStoredOrders, saveStoredOrders } from '../../ProductStore';
+import './CartItems.css';
 
 const CartItems = () => {
-  const { getTotalCartAmount, all_product, cartItems, removeFromCart } = useContext(ShopContext);
-  
+  const { all_product, cartItems, addToCart, removeFromCart, getTotalCartAmount } = useContext(ShopContext);
+
+  const totalAmount = getTotalCartAmount ? getTotalCartAmount() : 0;
+  const hasItems = Object.keys(cartItems || {}).some((key) => cartItems[key] > 0);
+
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('Cash on Delivery (COD)');
+  const [paymentMethod, setPaymentMethod] = useState('COD');
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [placingOrder, setPlacingOrder] = useState(false);
 
-  const handleOrderSubmit = (e) => {
+  const getToken = () => {
+    return (
+      localStorage.getItem('token') ||
+      localStorage.getItem('authToken') ||
+      localStorage.getItem('userToken') ||
+      localStorage.getItem('accessToken') ||
+      ''
+    );
+  };
+
+  const handleOrderSubmit = async (e) => {
     e.preventDefault();
     if (!name || !email || !phone || !address) {
       alert('Please fill in all the required details!');
       return;
     }
 
-    const newOrder = {
-      id: '#ORD-' + Math.floor(1000 + Math.random() * 9000),
-      customer: name,
-      email: email,
-      phone: phone,
-      address: address,
-      payment: paymentMethod,
-      total: '$' + getTotalCartAmount(),
-      status: 'Pending',
-      date: new Date().toLocaleDateString()
-    };
+    try {
+      setPlacingOrder(true);
+      const token = getToken();
 
-    const existingOrders = getStoredOrders();
-    saveStoredOrders([...existingOrders, newOrder]);
+      if (!token) {
+        alert('You must be logged in to place an order.');
+        setPlacingOrder(false);
+        return;
+      }
 
-    setOrderPlaced(true);
+      const orderItems = all_product
+        .filter((p) => cartItems[p.id] > 0)
+        .map((p) => ({
+          product_id: p.id,
+          quantity: cartItems[p.id],
+          price: p.new_price,
+        }));
+
+      if (orderItems.length === 0) {
+        alert('Your cart is empty.');
+        setPlacingOrder(false);
+        return;
+      }
+
+      const response = await fetch('http://localhost:5000/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          items: orderItems,
+          shipping_address: address,
+          payment_method: paymentMethod,
+          total_amount: totalAmount,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || 'Failed to place order');
+        setPlacingOrder(false);
+        return;
+      }
+
+      orderItems.forEach((item) => {
+        const qty = cartItems[item.product_id];
+        for (let i = 0; i < qty; i++) {
+          removeFromCart(item.product_id);
+        }
+      });
+
+      setOrderPlaced(true);
+    } catch (error) {
+      console.error('Order placement error:', error);
+      alert('Something went wrong while placing the order');
+    } finally {
+      setPlacingOrder(false);
+    }
   };
 
   return (
-    <div className='cartitems' style={{ width: '100%', minHeight: '80vh', backgroundColor: '#fafaf9', padding: '40px 20px', fontFamily: 'sans-serif', boxSizing: 'border-box' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', background: '#ffffff', padding: '30px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
-        
-        <div className="cartitems-format-main" style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 1fr 1fr 1fr 1fr', alignItems: 'center', gap: '20px', padding: '20px 0', color: '#1e293b', fontSize: '18px', fontWeight: 'bold', borderBottom: '2px solid #e2e8f0' }}>
-          <p>Products</p>
-          <p>Title</p>
-          <p>Price</p>
-          <p>Quantity</p>
-          <p>Total</p>
-          <p>Remove</p>
+    <div className="cartitems-container">
+      {!hasItems ? (
+        <div className="empty-cart-state">
+          <div className="empty-cart-icon-wrap">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="9" cy="21" r="1"/>
+              <circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+          </div>
+          <h2>Your Cart is Empty</h2>
+          <p>Looks like you haven't added anything to your cart yet.</p>
         </div>
-
-        {all_product.map((e) => {
-          if (cartItems[e.id] > 0) {
-            return (
-              <div key={e.id}>
-                <div className="cartitems-format cartitems-format-main" style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 1fr 1fr 1fr 1fr', alignItems: 'center', gap: '20px', padding: '15px 0', color: '#334155', fontSize: '16px', fontWeight: '500', borderBottom: '1px solid #f1f5f9' }}>
-                  <img src={e.image} alt="" style={{ height: '60px', width: '60px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e2e8f0' }} />
-                  <p>{e.name}</p>
-                  <p>${e.new_price}</p>
-                  <button style={{ width: '50px', height: '40px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: '6px', fontWeight: 'bold' }}>{cartItems[e.id]}</button>
-                  <p>${e.new_price * cartItems[e.id]}</p>
-                  <img onClick={() => removeFromCart(e.id)} src="https://static.vecteezy.com/system/resources/thumbnails/018/887/462/small/signs-close-icon-png.png" alt="remove" style={{ width: '20px', cursor: 'pointer' }} />
-                </div>
-              </div>
-            );
-          }
-          return null;
-        })}
-
-        {/* Cart Totals Section */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '40px' }}>
-          <div style={{ width: '100%', maxWidth: '400px', background: '#f8fafc', padding: '25px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-            <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px', color: '#1e293b' }}>Cart Totals</h2>
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #e2e8f0', color: '#64748b' }}>
-                <p>Subtotal</p>
-                <p style={{ fontWeight: '600', color: '#1e293b' }}>${getTotalCartAmount()}</p>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #e2e8f0', color: '#64748b' }}>
-                <p>Shipping Fee</p>
-                <p style={{ fontWeight: '600', color: '#16a34a' }}>Free</p>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 0', fontSize: '18px', fontWeight: 'bold', color: '#1e293b' }}>
-                <p>Total</p>
-                <p>${getTotalCartAmount()}</p>
-              </div>
+      ) : (
+        <div className="cartitems-wrapper">
+          <div className="cartitems-list">
+            <div className="cartitems-header">
+              <p className="col-img">Product</p>
+              <p className="col-title">Title</p>
+              <p className="col-price">Price</p>
+              <p className="col-qty">Quantity</p>
+              <p className="col-total">Total</p>
+              <p className="col-remove">Remove</p>
             </div>
 
-            {getTotalCartAmount() > 0 && (
-              <button 
-                onClick={() => { setShowModal(true); setOrderPlaced(false); }} 
-                style={{ width: '100%', height: '50px', outline: 'none', border: 'none', background: '#0f172a', color: '#fff', fontSize: '15px', fontWeight: 'bold', cursor: 'pointer', borderRadius: '8px', marginTop: '20px' }}
+            {all_product.map((e) => {
+              if (cartItems[e.id] > 0) {
+                return (
+                  <div key={e.id} className="cartitem-row">
+                    <div className="col-img">
+                      <img src={e.image} alt={e.name} className="cart-product-thumb" />
+                    </div>
+                    <p className="col-title cart-product-title">{e.name}</p>
+                    <p className="col-price">PKR {e.new_price}</p>
+                    
+                    <div className="col-qty">
+                      <div className="cartitems-quantity-btn">
+                        <button onClick={() => removeFromCart(e.id)}>-</button>
+                        <span>{cartItems[e.id]}</span>
+                        <button onClick={() => addToCart(e.id)}>+</button>
+                      </div>
+                    </div>
+
+                    <p className="col-total cart-product-total">PKR {e.new_price * cartItems[e.id]}</p>
+                    <div className="col-remove">
+                      <button 
+                        className="cartitems-remove-icon" 
+                        onClick={() => {
+                          for (let i = 0; i < cartItems[e.id]; i++) removeFromCart(e.id);
+                        }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            })}
+          </div>
+
+          <div className="cartitems-summary-slide-in">
+            <div className="cartitems-total">
+              <h3>Cart Totals</h3>
+              <div className="cartitems-total-item">
+                <p>Subtotal</p>
+                <p>PKR {totalAmount}</p>
+              </div>
+              <hr />
+              <div className="cartitems-total-item">
+                <p>Shipping Fee</p>
+                <p className="free-shipping">Free</p>
+              </div>
+              <hr />
+              <div className="cartitems-total-item grand-total">
+                <h3>Total</h3>
+                <h3>PKR {totalAmount}</h3>
+              </div>
+              <button
+                className="checkout-btn"
+                onClick={() => { setShowModal(true); setOrderPlaced(false); }}
               >
                 PROCEED TO CHECKOUT
               </button>
-            )}
+            </div>
           </div>
         </div>
+      )}
 
-      </div>
-
-      {/* Checkout Popup Modal */}
       {showModal && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0, 0, 0, 0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, padding: '20px' }}>
-          <div style={{ background: '#ffffff', width: '100%', maxWidth: '480px', padding: '30px', borderRadius: '12px', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', position: 'relative', maxHeight: '90vh', overflowY: 'auto' }}>
-            
-            <button 
-              onClick={() => setShowModal(false)}
-              style={{ position: 'absolute', top: '15px', right: '15px', background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#64748b', fontWeight: 'bold' }}
-            >
-              &times;
-            </button>
+        <div className="checkout-modal-overlay">
+          <div className="checkout-modal-card animate-pop">
+            <button className="modal-close-icon" onClick={() => setShowModal(false)}>&times;</button>
 
-            <h3 style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '20px', color: '#1e293b', textAlign: 'center' }}>Checkout Details</h3>
-            
             {orderPlaced ? (
-              <div style={{ textAlign: 'center', padding: '30px 0' }}>
-                <h4 style={{ color: '#16a34a', fontSize: '22px', marginBottom: '10px' }}>🎉 Order Placed Successfully!</h4>
-                <p style={{ color: '#64748b', marginBottom: '25px', fontSize: '14px' }}></p>
-                <button 
-                  onClick={() => setShowModal(false)}
-                  style={{ background: '#0f172a', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}
-                >
-                  Close
-                </button>
+              <div className="order-success-view">
+                <div className="modal-icon-container">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                </div>
+                <h2>Order Placed Successfully!</h2>
+                <p className="modal-subtext">Thank you for shopping with <strong>VESTRO X</strong>. Your order has been placed.</p>
+                <button className="modal-btn-primary" onClick={() => setShowModal(false)}>Continue Shopping</button>
               </div>
             ) : (
-              <form onSubmit={handleOrderSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '5px', color: '#475569' }}>Full Name</label>
-                  <input 
-                    type="text" placeholder="e.g. Faraz Qureshi" value={name} onChange={(e) => setName(e.target.value)} required
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', boxSizing: 'border-box' }}
-                  />
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '5px', color: '#475569' }}>Email Address</label>
-                  <input 
-                    type="email" placeholder="e.g. faraz@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} required
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', boxSizing: 'border-box' }}
-                  />
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '5px', color: '#475569' }}>Phone Number</label>
-                  <input 
-                    type="text" placeholder="e.g. 03001234567" value={phone} onChange={(e) => setPhone(e.target.value)} required
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', boxSizing: 'border-box' }}
-                  />
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '5px', color: '#475569' }}>Delivery Address</label>
-                  <textarea 
-                    placeholder="Enter your complete delivery address..." value={address} onChange={(e) => setAddress(e.target.value)} required rows="2"
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', boxSizing: 'border-box', fontFamily: 'sans-serif' }}
-                  />
-                </div>
-                <div>
-                  <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '5px', color: '#475569' }}>Payment Method</label>
-                  <select 
-                    value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}
-                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', background: '#fff', boxSizing: 'border-box' }}
-                  >
-                    <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
-                    <option value="JazzCash">JazzCash</option>
-                    <option value="EasyPaisa">EasyPaisa</option>
-                  </select>
-                </div>
-                <button type="submit" style={{ background: '#16a34a', color: '#fff', border: 'none', padding: '14px', borderRadius: '8px', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', marginTop: '10px' }}>
-                  Confirm Order
-                </button>
-              </form>
+              <div>
+                <h3 className="modal-header-title">Checkout Details</h3>
+                <form onSubmit={handleOrderSubmit} className="checkout-form">
+                  <div className="form-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="e.g. Faraz Qureshi" value={name} onChange={(e) => setName(e.target.value)} required />
+                  </div>
+                  <div className="form-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="e.g. faraz@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  </div>
+                  <div className="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" placeholder="e.g. 03001234567" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+                  </div>
+                  <div className="form-group">
+                    <label>Delivery Address</label>
+                    <textarea placeholder="Enter complete address..." value={address} onChange={(e) => setAddress(e.target.value)} required rows="2" />
+                  </div>
+                  <div className="form-group">
+                    <label>Payment Method</label>
+                    <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
+                      <option value="COD">Cash on Delivery (COD)</option>
+                      <option value="JazzCash">JazzCash</option>
+                      <option value="EasyPaisa">EasyPaisa</option>
+                    </select>
+                  </div>
+                  <button type="submit" className="modal-submit-btn" disabled={placingOrder}>
+                    {placingOrder ? 'Placing Order...' : 'Confirm Order'}
+                  </button>
+                </form>
+              </div>
             )}
-
           </div>
         </div>
       )}

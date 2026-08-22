@@ -3,7 +3,7 @@ import './Navbar.css'
 import logo from '../Assets/logo_big.png'
 import cart_icon from '../Assets/cart_icon.png'
 import wishlist_icon from '../Assets/wishlist_icon.png'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { ShopContext } from '../../Context/ShopContext'
 
 const Navbar = () => {
@@ -13,13 +13,17 @@ const Navbar = () => {
     <div className='navbar'>
       <div className='nav-top-row'>
         <div className='nav-logo'>
-          <img src={logo} alt="" />
+          <img src={logo} alt="VESTRO X Logo" />
           <p>VESTRO X</p>
         </div>
 
         <div className='nav-search-box'>
           <input type="text" placeholder='Search products, brands and categories...' />
-          <span className="search-icon">🔍</span>
+          <img 
+            src="https://cdn-icons-png.flaticon.com/512/622/622669.png" 
+            alt="Search" 
+            className="search-icon-img" 
+          />
         </div>
 
         <div className='nav-login-cart'>
@@ -49,21 +53,35 @@ const Navbar = () => {
 
       <div className='nav-bottom-row'>
         <ul className='nav-menu'>
-          <li><Link to='/home' style={{ textDecoration: 'none', color: 'inherit' }}>Home</Link></li>
-          <li><Link to='/shop' style={{ textDecoration: 'none', color: 'inherit' }}>Shop</Link></li>
-          <li><Link to='/contact' style={{ textDecoration: 'none', color: 'inherit' }}>Contact Us</Link></li>
-          <li><Link to='/about' style={{ textDecoration: 'none', color: 'inherit' }}>About Us</Link></li>
+          <li>
+            <NavLink to='/' className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to='/shop' className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
+              Shop
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to='/myorders' className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
+              My Orders
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to='/contact' className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
+              Contact Us
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to='/about' className={({ isActive }) => (isActive ? 'nav-item active' : 'nav-item')}>
+              About Us
+            </NavLink>
+          </li>
         </ul>
-      </div>
-
-      {/* Marquee Strip */}
-      <div className="nav-marquee-strip">
-        <marquee behavior="scroll" direction="left" scrollamount="6">
-          VESTRO X WISHLIST | VESTRO X | VESTRO X | VESTRO X | VESTRO X
-        </marquee>
       </div>
     </div>
   )
 }
 
-export default Navbar
+export default Navbar;
